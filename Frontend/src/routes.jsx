@@ -8,66 +8,62 @@ import {
 
 import { Home } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
+
 //SOLUTION ROUTES
-import SolutionCat from "./pages/solution/SolutionCat";
-import SolutionCatForm from "./pages/solutionform/SolutionCatForm";
-import SolutionSubCat from "./pages/solution/SolutionSubCat";
-import SolutionSubCatForm from "./pages/solutionform/SolutionSubCatForm";
+import SolutionCat from "./pages/solution/solutioncat/SolutionCat";
+import SolutionCatForm from "./pages/solution/solutioncat/SolutionCatForm";
+import SolutionSubCat from "./pages/solution/solutionsubcat/SolutionSubCat";
+import SolutionSubCatForm from "./pages/solution/solutionsubcat/SolutionSubCatForm";
+import SolutionImage from "./pages/solution/solutionimage/SolutionImage";
+import SolutionImageForm from "./pages/solution/solutionimage/SolutionImageForm";
 
 //CMS ROUTES
-import AboutUs from "./pages/cms/AboutUs";
-import AboutUsForm from "./pages/cmsform/AboutUsForm";
-import AboutUsEnterprise from "./pages/cms/AboutUsEnterprise";
-import AboutUsEnterpriseForm from "./pages/cmsform/AboutUsEnterpriseForm";
-import Solution from "./pages/cms/Solution";
-import Footer from "./pages/cms/Footer";
-import FooterForm from "./pages/cmsform/FooterForm";
-import OurTeam from "./pages/cms/OurTeam";
-import OurTeamForm from "./pages/cmsform/OurTeamForm";
-import Testimonial from "./pages/cms/Testimonial";
-import TestimonialForm from "./pages/cmsform/TestimonialForm";
-import Smarter from "./pages/cms/Smarter";
-import SmarterForm from "./pages/cmsform/SmarterForm";
-import Faq from "./pages/cms/Faq";
-import FaqForm from "./pages/cmsform/FaqForm";
+import AboutUs from "./pages/cms/about_us/AboutUs";
+import AboutUsForm from "./pages/cms/about_us/AboutUsForm";
+import AboutUsEnterprise from "./pages/cms/about_us_enterprise/AboutUsEnterprise";
+import AboutUsEnterpriseForm from "./pages/cms/about_us_enterprise/AboutUsEnterpriseForm";
+import Solution from "./pages/cms/solution/Solution";
+import Footer from "./pages/cms/footer/Footer";
+import FooterForm from "./pages/cms/footer/FooterForm";
+import OurTeam from "./pages/cms/our_team/OurTeam";
+import OurTeamForm from "./pages/cms/our_team/OurTeamForm";
+import Testimonial from "./pages/cms/testimonial/Testimonial";
+import TestimonialForm from "./pages/cms/testimonial/TestimonialForm";
+import Smarter from "./pages/cms/smarter/Smarter";
+import SmarterForm from "./pages/cms/smarter/SmarterForm";
+import Faq from "./pages/cms/faq/Faq";
+import FaqForm from "./pages/cms/faq/FaqForm";
 
 
 
 //MASTER ROUTES
-import SlidesContent from "./pages/master/SlidesContent";
-import AddSlidesContent from "./pages/admin/AddSlidesContent";
-import WhatSection from "./pages/master/WhatSection";
-import WhatSectionForm from "./pages/admin/WhatSectionForm";
-import Image from "./pages/master/Image";
-import ImageForm from "./pages/admin/ImageForm";
-import EmbeddedSection from "./pages/master/EmbeddedSection";
-import EmbeddedSectionForm from "./pages/admin/EmbeddedSectionForm";
-import NetworkSection from "./pages/master/NetworkSection";
-import NetworkSectionForm from "./pages/admin/NetworkSectionForm";
-import CloudSection from "./pages/master/CloudSection";
-import CloudSectionForm from "./pages/admin/CloudSection";
-import ManagementSection from "./pages/master/ManagementSection";
-import ManagementSectionForm from "./pages/admin/ManagementSectionForm";
-import SupportedContent from "./pages/master/SupportedContent";
-import SupportedContentForm from "./pages/admin/SupportedContentForm";
-import OfferSection from "./pages/master/OfferSection";
-import OfferSectionForm from "./pages/admin/OfferSectionForm";
-import EverywhereSlide from "./pages/master/EverywhereSlide";
-import EverywhereSlideForm from "./pages/admin/EverywhereSlideForm";
-import SolutionForm from "./pages/cmsform/SolutionForm";
-import AIPowered from "./pages/cms/AIPowered";
-import AIPoweredForm from "./pages/cmsform/AIPoweredForm";
-import Faqs from "./pages/master/Faqs";
-import FaqsForm from "./pages/admin/FaqsForm";
-import AboutUsBenefits from "./pages/cms/AboutUsBenefits";
-import AboutUsBenefitsForm from "./pages/cmsform/AboutUsBenefitsForm";
-
-
-
-
-
-
-
+import SlidesContent from "./pages/master/slides_content/SlidesContent";
+import AddSlidesContent from "./pages/master/slides_content/AddSlidesContent";
+import WhatSection from "./pages/master/wh_section/WhatSection";
+import WhatSectionForm from "./pages/master/wh_section/WhatSectionForm";
+import Image from "./pages/master/image/Image";
+import ImageForm from "./pages/master/image/ImageForm";
+import EmbeddedSection from "./pages/master/embedded_section/EmbeddedSection";
+import EmbeddedSectionForm from "./pages/master/embedded_section/EmbeddedSectionForm";
+import NetworkSection from "./pages/master/network_section/NetworkSection";
+import NetworkSectionForm from "./pages/master/network_section/NetworkSectionForm";
+import CloudSection from "./pages/master/cloud_section/CloudSection";
+import CloudSectionForm from "./pages/master/cloud_section/CloudSectionForm";
+import ManagementSection from "./pages/master/management_section/ManagementSection";
+import ManagementSectionForm from "./pages/master/management_section/ManagementSectionForm";
+import SupportedContent from "./pages/master/supported_content/SupportedContent";
+import SupportedContentForm from "./pages/master/supported_content/SupportedContentForm";
+import OfferSection from "./pages/master/offer_section/OfferSection";
+import OfferSectionForm from "./pages/master/offer_section/OfferSectionForm";
+import EverywhereSlide from "./pages/master/everywhere_slide/EverywhereSlide";
+import EverywhereSlideForm from "./pages/master/everywhere_slide/EverywhereSlideForm";
+import SolutionForm from "./pages/cms/solution/SolutionForm";
+import AIPowered from "./pages/cms/ai_powered/AIPowered";
+import AIPoweredForm from "./pages/cms/ai_powered/AIPoweredForm";
+import Faqs from "./pages/master/faqs/Faqs";
+import FaqsForm from "./pages/master/faqs/FaqsForm";
+import AboutUsBenefits from "./pages/cms/about_us_benefits/AboutUsBenefits";
+import AboutUsBenefitsForm from "./pages/cms/about_us_benefits/AboutUsBenefitsForm";
 
 
 
@@ -79,19 +75,7 @@ export const routes = [
   {
     layout: "dashboard",
     pages: [
-      {
-        name: "Edit Slide",
-        path: "/master/slides-content/edit/:id",
-        element: <AddSlidesContent />, // or EditSlide component
-      },
-
-      {
-        name: "Add Slide",
-        path: "/master/slides-content/add",
-        element: <AddSlidesContent />,
-      },
-
-      {
+         {
         icon: <HomeIcon {...icon} />,
         name: "dashboard",
         path: "/home",
@@ -124,6 +108,20 @@ export const routes = [
 {
   path: "/solution/solution-sub-cat/edit/:id",
   element: <SolutionSubCatForm />,
+},
+//SOLUTION IMAGE FORM
+{
+  name: "solution image",
+  path: "/solution/solution-images",
+  element: <SolutionImage />,
+},
+{
+  path: "/solution/solution-images/add",
+  element: <SolutionImageForm/>,
+},
+{
+  path: "/solution/solution-images/edit/:id",
+  element: <SolutionImageForm />,
 },
       // CMS ROUTES
       //About Us
@@ -284,12 +282,25 @@ export const routes = [
       },
 
       // MASTER ROUTES
+      //SLIDES CONTENT
       {
         icon: <Cog6ToothIcon {...icon} />,
         name: "slides-content",
         path: "/master/slides-content",
         element: <SlidesContent />,
       },
+      {
+        name: "Edit Slide",
+        path: "/master/slides-content/edit/:id",
+        element: <AddSlidesContent />, // or EditSlide component
+      },
+
+      {
+        name: "Add Slide",
+        path: "/master/slides-content/add",
+        element: <AddSlidesContent />,
+      },
+
       // WHAT SECTION ROUTES
       {
         icon: <Cog6ToothIcon {...icon} />,
@@ -401,12 +412,12 @@ export const routes = [
       },
       {
         name: "Add Supported Content",
-        path: "/master/supported-content/add",
+        path: "/master/supported-section/add",
         element: <SupportedContentForm />,
       },
       {
         name: "Edit Supported Content",
-        path: "/master/supported-content/edit/:id",
+        path: "/master/supported-section/edit/:id",
         element: <SupportedContentForm />,
       },
       //OFFER SECTION

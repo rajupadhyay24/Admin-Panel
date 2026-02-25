@@ -1,0 +1,125 @@
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Typography,
+  Button,
+} from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+export default function SlidesContent() {
+  const navigate = useNavigate();
+  const [data, setData] = useState([]);
+
+  const fetchData = async () => {
+    const res = await axios.get("http://localhost:5000/api/slides");
+    // console.log("the res is", res);
+    setData(res.data);
+  };
+
+  console.log("the data in the respnsew is ", data[0]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleDelete = async (id) => {
+    await axios.delete(`http://localhost:5000/api/slides/${id}`);
+    fetchData();
+  };
+
+  return (
+    <div className="mt-12 mb-8 px-6">
+      <Card>
+        <CardHeader
+          variant="gradient"
+          color="gray"
+          className="flex items-center justify-between p-6"
+        >
+          <Typography variant="h6" color="white">
+            Slides Content
+          </Typography>
+
+          <Button
+            size="sm"
+            color="white"
+            onClick={() => navigate("/dashboard/master/slides-content/add")}
+          >
+            Add
+          </Button>
+        </CardHeader>
+
+        <CardBody className="overflow-x-auto">
+          <table className="w-full border table-fixed">
+            <thead className="bg-blue-gray-50">
+              <tr>
+                <th className="border border-blue-gray-200 px-4 py-3 w-1/3">Title</th>
+                <th className="border border-blue-gray-200 px-4 py-3 w-1/3">Media</th>
+                <th className="border border-blue-gray-200 px-4 py-3 w-1/3">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item) => (
+                <tr key={item.id}>
+                  <td className="border border-blue-gray-200 px-4 py-3">
+                    {item.title.length > 40
+                      ? item.title.substring(0, 40) + "..."
+                      : item.title}
+                  </td>
+
+                  <td className="border border-blue-gray-200 px-4 py-3">
+                    {item.media ? (
+                      item.media.match(/\.(mp4|webm|ogg)$/i) ? (
+                        <video
+                          src={`http://localhost:5000/${item.media}`}
+                          width="120"
+                          height="80"
+                          style={{ objectFit: "cover" }}
+                          controls
+                        />
+                      ) : (
+                        <img
+                          src={`http://localhost:5000/${item.media}`}
+                          alt=""
+                          width="120"
+                          height="80"
+                          style={{ objectFit: "cover" }}
+                        />
+                      )
+                    ) : (
+                      "No Media"
+                    )}
+                  </td>
+
+                  <td className="border border-blue-gray-200 px-4 py-3">
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outlined"
+                        onClick={() =>
+                          navigate(`/dashboard/master/slides-content/edit/${item.id}`)
+                        }
+                      >
+                        Edit
+                      </Button>
+
+                      <Button
+                        size="sm"
+                        color="red"
+                        onClick={() => handleDelete(item.id)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </CardBody>
+      </Card>
+    </div>
+  );
+}

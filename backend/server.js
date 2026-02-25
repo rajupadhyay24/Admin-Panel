@@ -8,6 +8,14 @@ const aboutUsEnterpriseRoutes = require("./routes/aboutUsEnterpriseRoutes");
 const aboutUsBenefitsRoutes = require("./routes/aboutUsBenefitsRoutes")
 const solutionCatRoutes = require("./routes/solutionCatRoutes");
 const solutionSubCatRoutes = require("./routes/solutionSubCatRoutes");
+const slidesRoutes = require("./routes/slidesRoutes");
+const whatSectionRoutes = require("./routes/whatSectionRoutes");
+const imageButton = require("./routes/imageButton")
+const embeddedRoutes = require("./routes/embeddedRoutes");
+const networkSectionRoutes = require("./routes/networkSectionRoutes");
+const cloudSectionRoutes = require("./routes/cloudSectionRoutes");
+const managementSectionRoutes = require("./routes/managementSectionRoutes");
+
 
 const app = express();
 
@@ -22,6 +30,26 @@ app.use("/api/aboutusenterprise", aboutUsEnterpriseRoutes);
 app.use("/api/aboutusbenefits", aboutUsBenefitsRoutes);
 app.use("/api/solution-cat", solutionCatRoutes);
 app.use("/api/solution-sub-cat", solutionSubCatRoutes);
+app.use("/api/what-section" , whatSectionRoutes);
+
+
+app.use("/api/embeddedsection" , embeddedRoutes);
+
+app.use("/api/networksection" , networkSectionRoutes);
+
+app.use("/api/cloudsection" , cloudSectionRoutes);
+
+app.use("/api/managementsection" , managementSectionRoutes);
+
+
+app.use("/api/supported-content" , slidesRoutes);
+app.use("/api/slides" , slidesRoutes);
+app.use("/api/slides" , slidesRoutes);
+app.use("/api/slides" , slidesRoutes);
+app.use("/api/slides" , slidesRoutes);
+app.use("/api/slides" , slidesRoutes);
+app.use("/api/slides" , slidesRoutes);
+app.use("/api/slides" , slidesRoutes);
 
 
 app.listen(process.env.PORT, () => {

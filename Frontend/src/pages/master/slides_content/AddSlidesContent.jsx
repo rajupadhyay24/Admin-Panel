@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
+const BASE_URL = "http://localhost:5000";
+
 export default function AddSlidesContent() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -15,18 +17,31 @@ export default function AddSlidesContent() {
   const [title, setTitle] = useState("");
   const [media, setMedia] = useState(null);
   const [oldMedia, setOldMedia] = useState("");
+  const [preview, setPreview] = useState("");
 
+  /* ================= FETCH SINGLE ================= */
   useEffect(() => {
     if (id) {
-      axios
-        .get(`http://localhost:5000/api/slides/${id}`)
+      axios.get(`${BASE_URL}/api/slides/${id}`)
         .then((res) => {
-          setTitle(res.data.title);
-          setOldMedia(res.data.media);
-        });
+          setTitle(res.data?.title || "");
+          setOldMedia(res.data?.media || "");
+        })
+        .catch((err) => console.log(err));
     }
   }, [id]);
 
+  /* ================= HANDLE FILE CHANGE ================= */
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setMedia(file);
+
+    if (file) {
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
+  /* ================= SUBMIT ================= */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -34,26 +49,55 @@ export default function AddSlidesContent() {
     formData.append("title", title);
     if (media) formData.append("media", media);
 
-    if (id) {
-      await axios.put(
-        `http://localhost:5000/api/slides/${id}`,
-        formData
-      );
-    } else {
-      await axios.post(
-        "http://localhost:5000/api/slides",
-        formData
+    try {
+      if (id) {
+        await axios.put(`${BASE_URL}/api/slides/${id}`, formData);
+      } else {
+        await axios.post(`${BASE_URL}/api/slides`, formData);
+      }
+
+      navigate("/dashboard/master/slides-content");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const renderMedia = (src) => {
+    if (!src) return null;
+
+    const fullPath = `${BASE_URL}/${src}`;
+
+    if (src.match(/\.(mp4|webm|ogg)$/i)) {
+      return (
+        <video
+          src={fullPath}
+          width="220"
+          controls
+          className="rounded shadow"
+        />
       );
     }
 
-    navigate("/dashboard/master/slides-content");
+    return (
+      <img
+        src={fullPath}
+        alt="media"
+        width="220"
+        className="rounded shadow object-cover"
+      />
+    );
   };
 
   return (
     <div className="mt-12 mb-8 px-6">
-      <Card className="p-10">
+      <Card className="p-8 shadow-lg">
+        <Typography variant="h5" className="mb-6">
+          {id ? "Edit Slide" : "Add Slide"}
+        </Typography>
+
         <form onSubmit={handleSubmit} className="space-y-6">
 
+          {/* TITLE */}
           <div>
             <Typography variant="small" className="mb-2">
               Title
@@ -65,38 +109,53 @@ export default function AddSlidesContent() {
             />
           </div>
 
+          {/* MEDIA */}
           <div>
             <Typography variant="small" className="mb-2">
               Image / Video
             </Typography>
+
             <input
               type="file"
-              onChange={(e) => setMedia(e.target.files[0])}
-              className="w-full"
+              onChange={handleFileChange}
+              className="w-full border p-2 rounded"
             />
 
-            {oldMedia && (
-              <div className="mt-3">
-                {oldMedia.match(/\.(mp4|webm|ogg)$/i) ? (
-                  <video
-                    src={`http://localhost:5000/ /${oldMedia}`}
-                    width="200"
-                    controls
-                  />
-                ) : (
-                  <img
-                    src={`http://localhost:5000/ /${oldMedia}`}
-                    alt=""
-                    width="200"
-                  />
-                )}
+            {/* NEW PREVIEW */}
+            {preview && (
+              <div className="mt-4">
+                <Typography variant="small" className="mb-2">
+                  New Preview
+                </Typography>
+                {renderMedia(preview)}
+              </div>
+            )}
+
+            {/* OLD MEDIA */}
+            {!preview && oldMedia && (
+              <div className="mt-4">
+                <Typography variant="small" className="mb-2">
+                  Existing Media
+                </Typography>
+                {renderMedia(oldMedia)}
               </div>
             )}
           </div>
 
-          <Button type="submit" fullWidth>
-            {id ? "Update" : "Add"}
-          </Button>
+          {/* BUTTON */}
+          <div className="flex gap-4">
+            <Button type="submit">
+              {id ? "Update Slide" : "Add Slide"}
+            </Button>
+
+            <Button
+              color="gray"
+              variant="outlined"
+              onClick={() => navigate(-1)}
+            >
+              Cancel
+            </Button>
+          </div>
 
         </form>
       </Card>

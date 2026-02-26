@@ -9,30 +9,65 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const BASE_URL = "http://localhost:5000";
+
 export default function SlidesContent() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
-    const res = await axios.get("http://localhost:5000/api/slides");
-    // console.log("the res is", res);
-    setData(res.data);
+    try {
+      const res = await axios.get(`${BASE_URL}/api/slides`);
+      setData(res.data || []);
+    } catch (error) {
+      console.error(error);
+    }
   };
-
-  console.log("the data in the respnsew is ", data[0]);
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/api/slides/${id}`);
+    if (!window.confirm("Are you sure you want to delete this slide?"))
+      return;
+
+    await axios.delete(`${BASE_URL}/api/slides/${id}`);
     fetchData();
+  };
+
+  const renderMedia = (src) => {
+    if (!src) return "No Media";
+
+    const fullPath = `${BASE_URL}/${src}`;
+
+    if (src.match(/\.(mp4|webm|ogg)$/i)) {
+      return (
+        <video
+          src={fullPath}
+          width="120"
+          height="80"
+          style={{ objectFit: "cover" }}
+          controls
+          className="rounded"
+        />
+      );
+    }
+
+    return (
+      <img
+        src={fullPath}
+        alt="media"
+        width="120"
+        height="80"
+        className="rounded object-cover"
+      />
+    );
   };
 
   return (
     <div className="mt-12 mb-8 px-6">
-      <Card>
+      <Card className="shadow-lg">
         <CardHeader
           variant="gradient"
           color="gray"
@@ -47,7 +82,7 @@ export default function SlidesContent() {
             color="white"
             onClick={() => navigate("/dashboard/master/slides-content/add")}
           >
-            Add
+            Add Slide
           </Button>
         </CardHeader>
 
@@ -55,67 +90,59 @@ export default function SlidesContent() {
           <table className="w-full border table-fixed">
             <thead className="bg-blue-gray-50">
               <tr>
-                <th className="border border-blue-gray-200 px-4 py-3 w-1/3">Title</th>
-                <th className="border border-blue-gray-200 px-4 py-3 w-1/3">Media</th>
-                <th className="border border-blue-gray-200 px-4 py-3 w-1/3">Action</th>
+                <th className="border px-4 py-3 w-1/3">Title</th>
+                <th className="border px-4 py-3 w-1/3">Media</th>
+                <th className="border px-4 py-3 w-1/3">Action</th>
               </tr>
             </thead>
+
             <tbody>
-              {data.map((item) => (
-                <tr key={item.id}>
-                  <td className="border border-blue-gray-200 px-4 py-3">
-                    {item.title.length > 40
-                      ? item.title.substring(0, 40) + "..."
-                      : item.title}
-                  </td>
+              {data.length > 0 ? (
+                data.map((item) => (
+                  <tr key={item.id}>
+                    <td className="border px-4 py-3 truncate">
+                      {item.title || "-"}
+                    </td>
 
-                  <td className="border border-blue-gray-200 px-4 py-3">
-                    {item.media ? (
-                      item.media.match(/\.(mp4|webm|ogg)$/i) ? (
-                        <video
-                          src={`http://localhost:5000/${item.media}`}
-                          width="120"
-                          height="80"
-                          style={{ objectFit: "cover" }}
-                          controls
-                        />
-                      ) : (
-                        <img
-                          src={`http://localhost:5000/${item.media}`}
-                          alt=""
-                          width="120"
-                          height="80"
-                          style={{ objectFit: "cover" }}
-                        />
-                      )
-                    ) : (
-                      "No Media"
-                    )}
-                  </td>
+                    <td className="border px-4 py-3">
+                      {renderMedia(item.media)}
+                    </td>
 
-                  <td className="border border-blue-gray-200 px-4 py-3">
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        variant="outlined"
-                        onClick={() =>
-                          navigate(`/dashboard/master/slides-content/edit/${item.id}`)
-                        }
-                      >
-                        Edit
-                      </Button>
+                    <td className="border px-4 py-3">
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outlined"
+                          onClick={() =>
+                            navigate(
+                              `/dashboard/master/slides-content/edit/${item.id}`
+                            )
+                          }
+                        >
+                          Edit
+                        </Button>
 
-                      <Button
-                        size="sm"
-                        color="red"
-                        onClick={() => handleDelete(item.id)}
-                      >
-                        Delete
-                      </Button>
-                    </div>
+                        <Button
+                          size="sm"
+                          color="red"
+                          onClick={() => handleDelete(item.id)}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="3"
+                    className="text-center py-6 text-gray-500"
+                  >
+                    No Slides Found
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </CardBody>

@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Dashboard, Auth } from "@/layouts";
 import { SignIn } from "@/pages/auth";
-import AddSlidesContent from "./pages/admin/AddSlidesContent";
-import SlidesContent from "./pages/master/SlidesContent";
+import AddSlidesContent from "./pages/master/slides_content/AddSlidesContent";
+import SlidesContent from "./pages/master/slides_content/SlidesContent";
 
 function App() {
   return (

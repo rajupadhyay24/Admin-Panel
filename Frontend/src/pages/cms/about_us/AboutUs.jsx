@@ -103,7 +103,7 @@ export default function AboutUs() {
                   <td className="border border-blue-gray-200 px-4 py-3 text-center">
                     {item.image1 && (
                       <img
-                        src={`http://localhost:5000/uploads/${item.image1}`}
+                        src={`http://localhost:5000/${item.image1}`}
                         className="h-14 w-14 object-cover rounded-lg mx-auto"
                         alt=""
                       />
@@ -114,7 +114,7 @@ export default function AboutUs() {
                   <td className="border border-blue-gray-200 px-4 py-3 text-center">
                     {item.image2 && (
                       <img
-                        src={`http://localhost:5000/uploads/${item.image2}`}
+                        src={`http://localhost:5000/${item.image2}`}
                         className="h-14 w-14 object-cover rounded-lg mx-auto"
                         alt=""
                       />

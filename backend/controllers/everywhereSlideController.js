@@ -12,21 +12,34 @@ const stripHtml = (value) => {
 };
 
 /* =============================== */
+/* HELPER: BUILD FULL IMAGE URL */
+/* =============================== */
+const buildImagePath = (req, file, existingImage = null) => {
+  if (file) {
+    return `uploads/${file.filename}`;
+  }
+  return existingImage;
+};
+
+/* =============================== */
 /* CREATE */
 /* =============================== */
 exports.create = async (req, res) => {
   try {
     const file = req.file;
 
-    await prisma.everywhere_slide.create({
-      data: {
-        heading: stripHtml(req.body.heading) ?? null,
-        paragraph: stripHtml(req.body.paragraph) ?? null,
-        image: file ? ` /${file.filename}` : null,
-      },
-    });
+    const data = {
+      heading: stripHtml(req.body.heading) ?? null,
+      paragraph: stripHtml(req.body.paragraph) ?? null,
+      image: buildImagePath(req, file),
+    };
 
-    res.status(201).json({ message: "Created successfully" });
+    const created = await prisma.everywhere_slide.create({ data });
+
+    res.status(201).json({
+      message: "Created successfully",
+      data: created,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to create record" });
@@ -44,6 +57,7 @@ exports.getAll = async (req, res) => {
 
     res.json(records);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Failed to fetch records" });
   }
 };
@@ -54,15 +68,19 @@ exports.getAll = async (req, res) => {
 exports.getById = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
+    if (isNaN(id))
+      return res.status(400).json({ message: "Invalid ID" });
 
     const record = await prisma.everywhere_slide.findUnique({
       where: { id },
     });
 
-    if (!record) return res.status(404).json({ message: "Not found" });
+    if (!record)
+      return res.status(404).json({ message: "Record not found" });
 
     res.json(record);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Failed to fetch record" });
   }
 };
@@ -73,31 +91,41 @@ exports.getById = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
+    if (isNaN(id))
+      return res.status(400).json({ message: "Invalid ID" });
+
     const file = req.file;
 
     const existing = await prisma.everywhere_slide.findUnique({
       where: { id },
     });
 
-    if (!existing) return res.status(404).json({ message: "Not found" });
+    if (!existing)
+      return res.status(404).json({ message: "Record not found" });
 
-    await prisma.everywhere_slide.update({
+    const updatedData = {
+      heading: req.body.heading
+        ? stripHtml(req.body.heading)
+        : existing.heading,
+
+      paragraph: req.body.paragraph
+        ? stripHtml(req.body.paragraph)
+        : existing.paragraph,
+
+      image: buildImagePath(req, file, existing.image),
+    };
+
+    const updated = await prisma.everywhere_slide.update({
       where: { id },
-      data: {
-        heading: req.body.heading
-          ? stripHtml(req.body.heading)
-          : existing.heading,
-
-        paragraph: req.body.paragraph
-          ? stripHtml(req.body.paragraph)
-          : existing.paragraph,
-
-        image: file ? ` /${file.filename}` : existing.image,
-      },
+      data: updatedData,
     });
 
-    res.json({ message: "Updated successfully" });
+    res.json({
+      message: "Updated successfully",
+      data: updated,
+    });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Failed to update record" });
   }
 };
@@ -108,6 +136,15 @@ exports.update = async (req, res) => {
 exports.remove = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
+    if (isNaN(id))
+      return res.status(400).json({ message: "Invalid ID" });
+
+    const existing = await prisma.everywhere_slide.findUnique({
+      where: { id },
+    });
+
+    if (!existing)
+      return res.status(404).json({ message: "Record not found" });
 
     await prisma.everywhere_slide.delete({
       where: { id },
@@ -115,6 +152,7 @@ exports.remove = async (req, res) => {
 
     res.json({ message: "Deleted successfully" });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Failed to delete record" });
   }
 };

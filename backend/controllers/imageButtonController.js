@@ -1,5 +1,3 @@
-// controllers/imageButtonSectionController.js
-
 const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
@@ -10,7 +8,6 @@ const path = require("path");
 const deleteFile = (filePathFromDb) => {
   if (!filePathFromDb) return;
 
-  // filePathFromDb example:  /abc.png
   const fullPath = path.join(__dirname, "..", filePathFromDb);
 
   if (fs.existsSync(fullPath)) {
@@ -25,9 +22,16 @@ const deleteFile = (filePathFromDb) => {
 /* =============================== */
 /* HELPER: Strip HTML */
 /* =============================== */
-const stripHtml = (html) => {
-  if (!html || typeof html !== "string") return html;
-  return html.replace(/<[^>]*>/g, "").trim();
+const stripHtml = (value) => {
+  if (!value || typeof value !== "string") return null;
+
+  const clean = value
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return clean.length ? clean : null;
 };
 
 /* =============================== */
@@ -42,7 +46,7 @@ exports.getAll = async (req, res) => {
     res.json(records);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to fetch records" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -52,18 +56,20 @@ exports.getAll = async (req, res) => {
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
-    if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+    if (isNaN(id))
+      return res.status(400).json({ message: "Invalid ID" });
 
     const record = await prisma.image_button_section.findUnique({
       where: { id },
     });
 
-    if (!record) return res.status(404).json({ message: "Not found" });
+    if (!record)
+      return res.status(404).json({ message: "Not found" });
 
     res.json(record);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to fetch record" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -72,21 +78,32 @@ exports.getOne = async (req, res) => {
 /* =============================== */
 exports.create = async (req, res) => {
   try {
-    const data = {
-      heading: stripHtml(req.body.heading) ?? null,
-      paragraph: stripHtml(req.body.paragraph) ?? null,
-      image: req.file ? ` /${req.file.filename}` : null,
-    };
+    const cleanHeading = stripHtml(req.body.heading);
+    const cleanParagraph = stripHtml(req.body.paragraph);
 
-    const created = await prisma.image_button_section.create({ data });
+    if (!cleanHeading) {
+      return res.status(400).json({ message: "Heading is required" });
+    }
+
+    const imagePath = req.file
+      ? `uploads/${req.file.filename}`
+      : null;
+
+    const created = await prisma.image_button_section.create({
+      data: {
+        heading: cleanHeading,
+        paragraph: cleanParagraph,
+        image: imagePath,
+      },
+    });
 
     res.status(201).json({
       message: "Created successfully",
-      id: created.id,
+      data: created,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to create record" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -96,40 +113,42 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
-    if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+    if (isNaN(id))
+      return res.status(400).json({ message: "Invalid ID" });
 
     const existing = await prisma.image_button_section.findUnique({
       where: { id },
     });
 
-    if (!existing) return res.status(404).json({ message: "Not found" });
+    if (!existing)
+      return res.status(404).json({ message: "Not found" });
 
-    let newImage = existing.image;
+    let imagePath = existing.image;
 
     // If new image uploaded
     if (req.file) {
-      newImage = ` /${req.file.filename}`;
+      if (existing.image) {
+        deleteFile(existing.image);
+      }
+      imagePath = `uploads/${req.file.filename}`;
     }
-
-    const data = {
-      heading: req.body.heading
-        ? stripHtml(req.body.heading)
-        : existing.heading,
-      paragraph: req.body.paragraph
-        ? stripHtml(req.body.paragraph)
-        : existing.paragraph,
-      image: newImage,
-    };
 
     const updated = await prisma.image_button_section.update({
       where: { id },
-      data,
-    });
+      data: {
+        heading:
+          req.body.heading !== undefined
+            ? stripHtml(req.body.heading)
+            : existing.heading,
 
-    // Delete old image AFTER successful update
-    if (req.file && existing.image) {
-      deleteFile(existing.image);
-    }
+        paragraph:
+          req.body.paragraph !== undefined
+            ? stripHtml(req.body.paragraph)
+            : existing.paragraph,
+
+        image: imagePath,
+      },
+    });
 
     res.json({
       message: "Updated successfully",
@@ -137,7 +156,7 @@ exports.update = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to update record" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -147,25 +166,27 @@ exports.update = async (req, res) => {
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);
-    if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+    if (isNaN(id))
+      return res.status(400).json({ message: "Invalid ID" });
 
     const existing = await prisma.image_button_section.findUnique({
       where: { id },
     });
 
-    if (!existing) return res.status(404).json({ message: "Not found" });
-
-    await prisma.image_button_section.delete({
-      where: { id },
-    });
+    if (!existing)
+      return res.status(404).json({ message: "Not found" });
 
     if (existing.image) {
       deleteFile(existing.image);
     }
 
+    await prisma.image_button_section.delete({
+      where: { id },
+    });
+
     res.json({ message: "Deleted successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to delete record" });
+    res.status(500).json({ error: error.message });
   }
 };

@@ -6,17 +6,9 @@ const upload = require("../middleware/upload");
 router.get("/", slidesController.getAll);
 router.get("/:id", slidesController.getOne);
 
-router.post(
-  "/",
-  upload.single("media"),
-  slidesController.create
-);
+router.post("/", upload.single("media"), slidesController.create);
 
-router.put(
-  "/:id",
-  upload.single("media"),
-  slidesController.update
-);
+router.put("/:id", upload.single("media"), slidesController.update);
 
 router.delete("/:id", slidesController.remove);
 

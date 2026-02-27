@@ -11,6 +11,16 @@ const stripHtml = (value) => {
     .trim();
 };
 
+/* =============================== */
+/* HELPER: BUILD FULL IMAGE URL */
+/* =============================== */
+const buildImagePath = (req, fileArray, existingImage = null) => {
+  if (fileArray && fileArray.length > 0) {
+    return `uploads/${fileArray[0].filename}`;
+  }
+  return existingImage;
+};
+
 // ===============================
 // CREATE OFFER
 // ===============================
@@ -29,13 +39,16 @@ exports.create = async (req, res) => {
       paragraph2: stripHtml(req.body.paragraph2) ?? null,
       paragraph3: stripHtml(req.body.paragraph3) ?? null,
       paragraph4: stripHtml(req.body.paragraph4) ?? null,
-      image1: files.image1?.[0] ? ` /${files.image1[0].filename}` : null,
-      image2: files.image2?.[0] ? ` /${files.image2[0].filename}` : null,
+      image1: buildImagePath(req, files.image1),
+      image2: buildImagePath(req, files.image2),
     };
 
     await prisma.offer.create({ data });
 
-    res.status(201).json({ message: "Created successfully" });
+    res.status(201).json({
+      message: "Offer created successfully",
+      data,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to create offer" });
@@ -65,7 +78,9 @@ exports.getById = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
 
-    const offer = await prisma.offer.findUnique({ where: { id } });
+    const offer = await prisma.offer.findUnique({
+      where: { id },
+    });
 
     if (!offer) {
       return res.status(404).json({ message: "Offer not found" });
@@ -86,8 +101,13 @@ exports.update = async (req, res) => {
     const id = parseInt(req.params.id);
     const files = req.files || {};
 
-    const existing = await prisma.offer.findUnique({ where: { id } });
-    if (!existing) return res.status(404).json({ message: "Offer not found" });
+    const existing = await prisma.offer.findUnique({
+      where: { id },
+    });
+
+    if (!existing) {
+      return res.status(404).json({ message: "Offer not found" });
+    }
 
     const updatedData = {
       title: req.body.title ? stripHtml(req.body.title) : existing.title,
@@ -118,12 +138,8 @@ exports.update = async (req, res) => {
       paragraph4: req.body.paragraph4
         ? stripHtml(req.body.paragraph4)
         : existing.paragraph4,
-      image1: files.image1?.[0]
-        ? ` /${files.image1[0].filename}`
-        : existing.image1,
-      image2: files.image2?.[0]
-        ? ` /${files.image2[0].filename}`
-        : existing.image2,
+      image1: buildImagePath(req, files.image1, existing.image1),
+      image2: buildImagePath(req, files.image2, existing.image2),
     };
 
     await prisma.offer.update({
@@ -131,7 +147,10 @@ exports.update = async (req, res) => {
       data: updatedData,
     });
 
-    res.json({ message: "Updated successfully" });
+    res.json({
+      message: "Offer updated successfully",
+      data: updatedData,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to update offer" });
@@ -145,12 +164,19 @@ exports.delete = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
 
-    const existing = await prisma.offer.findUnique({ where: { id } });
-    if (!existing) return res.status(404).json({ message: "Offer not found" });
+    const existing = await prisma.offer.findUnique({
+      where: { id },
+    });
 
-    await prisma.offer.delete({ where: { id } });
+    if (!existing) {
+      return res.status(404).json({ message: "Offer not found" });
+    }
 
-    res.json({ message: "Deleted successfully" });
+    await prisma.offer.delete({
+      where: { id },
+    });
+
+    res.json({ message: "Offer deleted successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to delete offer" });

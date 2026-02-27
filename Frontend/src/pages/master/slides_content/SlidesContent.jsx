@@ -90,9 +90,9 @@ export default function SlidesContent() {
           <table className="w-full border table-fixed">
             <thead className="bg-blue-gray-50">
               <tr>
-                <th className="border px-4 py-3 w-1/3">Title</th>
-                <th className="border px-4 py-3 w-1/3">Media</th>
-                <th className="border px-4 py-3 w-1/3">Action</th>
+                <th className="border-blue-gray-200 border px-4 py-3 w-1/3">Title</th>
+                <th className="border-blue-gray-200 border px-4 py-3 w-1/3">Media</th>
+                <th className="border-blue-gray-200 border px-4 py-3 w-1/3">Action</th>
               </tr>
             </thead>
 
@@ -100,15 +100,15 @@ export default function SlidesContent() {
               {data.length > 0 ? (
                 data.map((item) => (
                   <tr key={item.id}>
-                    <td className="border px-4 py-3 truncate">
+                    <td className="border-blue-gray-200 border px-4 py-3 truncate">
                       {item.title || "-"}
                     </td>
 
-                    <td className="border px-4 py-3">
+                    <td className="border-blue-gray-200 border px-4 py-3">
                       {renderMedia(item.media)}
                     </td>
 
-                    <td className="border px-4 py-3">
+                    <td className="border-blue-gray-200 border px-4 py-3">
                       <div className="flex gap-2">
                         <Button
                           size="sm"

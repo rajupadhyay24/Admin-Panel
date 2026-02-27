@@ -34,13 +34,13 @@ export default function AboutUsEnterpriseForm() {
           if (res.data.image1)
             setPreview((p) => ({
               ...p,
-              image1: `http://localhost:5000/ /${res.data.image1}`,
+              image1: `http://localhost:5000/${res.data.image1}`,
             }));
 
           if (res.data.image2)
             setPreview((p) => ({
               ...p,
-              image2: `http://localhost:5000/ /${res.data.image2}`,
+              image2: `http://localhost:5000/${res.data.image2}`,
             }));
         });
     }

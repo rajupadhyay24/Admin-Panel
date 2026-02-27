@@ -33,7 +33,7 @@ export default function AIPoweredForm() {
           setFormData(res.data);
 
           if (res.data.media) {
-           const fileUrl = `http://localhost:5000/ /${res.data.media}`;
+           const fileUrl = `http://localhost:5000/${res.data.media}`;
             setPreview(fileUrl);
 
             // detect video from extension

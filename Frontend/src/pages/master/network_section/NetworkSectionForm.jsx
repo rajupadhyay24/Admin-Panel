@@ -46,10 +46,10 @@ export default function NetworkSectionForm() {
 
           // preview me URL for frontend
           setPreview({
-            image1: data.image1 ? `http://localhost:5000/ /${data.image1}` : null,
-            image2: data.image2 ? `http://localhost:5000/ /${data.image2}` : null,
-            image3: data.image3 ? `http://localhost:5000/ /${data.image3}` : null,
-            image4: data.image4 ? `http://localhost:5000/ /${data.image4}` : null,
+            image1: data.image1 ? `http://localhost:5000/${data.image1}` : null,
+            image2: data.image2 ? `http://localhost:5000/${data.image2}` : null,
+            image3: data.image3 ? `http://localhost:5000/${data.image3}` : null,
+            image4: data.image4 ? `http://localhost:5000/${data.image4}` : null,
           });
         })
         .catch((err) => console.error(err));

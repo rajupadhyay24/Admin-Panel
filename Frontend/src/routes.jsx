@@ -22,7 +22,7 @@ import AboutUs from "./pages/cms/about_us/AboutUs";
 import AboutUsForm from "./pages/cms/about_us/AboutUsForm";
 import AboutUsEnterprise from "./pages/cms/about_us_enterprise/AboutUsEnterprise";
 import AboutUsEnterpriseForm from "./pages/cms/about_us_enterprise/AboutUsEnterpriseForm";
-import Solution from "./pages/cms/solution/Solution";
+// import Solution from "./pages/cms/solution/Solution";
 import Footer from "./pages/cms/footer/Footer";
 import FooterForm from "./pages/cms/footer/FooterForm";
 import OurTeam from "./pages/cms/our_team/OurTeam";
@@ -57,7 +57,7 @@ import OfferSection from "./pages/master/offer_section/OfferSection";
 import OfferSectionForm from "./pages/master/offer_section/OfferSectionForm";
 import EverywhereSlide from "./pages/master/everywhere_slide/EverywhereSlide";
 import EverywhereSlideForm from "./pages/master/everywhere_slide/EverywhereSlideForm";
-import SolutionForm from "./pages/cms/solution/SolutionForm";
+// import SolutionForm from "./pages/cms/solution/SolutionForm";
 import AIPowered from "./pages/cms/ai_powered/AIPowered";
 import AIPoweredForm from "./pages/cms/ai_powered/AIPoweredForm";
 import Faqs from "./pages/master/faqs/Faqs";
@@ -171,21 +171,21 @@ export const routes = [
   element: <AboutUsBenefitsForm/>,
 },
 
-      //Solution
-      {
-        icon: <DocumentTextIcon {...icon} />,
-        name: "solution",
-        path: "/cms/solution",
-        element: <Solution />,
-      },
-      {
-        path: "/cms/solution/add",
-        element: <SolutionForm />,
-      },
-      {
-        path: "/cms/solution/edit/:id",
-        element: <SolutionForm />,
-      },
+      // //Solution
+      // {
+      //   icon: <DocumentTextIcon {...icon} />,
+      //   name: "solution",
+      //   path: "/cms/solution",
+      //   element: <Solution />,
+      // },
+      // {
+      //   path: "/cms/solution/add",
+      //   element: <SolutionForm />,
+      // },
+      // {
+      //   path: "/cms/solution/edit/:id",
+      //   element: <SolutionForm />,
+      // },
       //FOOTER 
       {
         path: "/cms/footer",

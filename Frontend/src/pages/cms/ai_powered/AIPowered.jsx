@@ -12,12 +12,18 @@ import axios from "axios";
 export default function AIPowered() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const [preview, setPreview] = useState(null);
 
   const fetchData = async () => {
     const res = await axios.get("http://localhost:5000/api/ai-powered");
     setData(res.data);
+     if (res.data.media) {
+           const fileUrl = `http://localhost:5000/${res.data.media}`;
+            setPreview(fileUrl);
+   }
   };
 
+  
   useEffect(() => {
     fetchData();
   }, []);
@@ -26,6 +32,8 @@ export default function AIPowered() {
     await axios.delete(`http://localhost:5000/api/ai-powered/${id}`);
     fetchData();
   };
+
+  
 
   return (
     <div className="mt-12 mb-8 px-6">
@@ -109,7 +117,7 @@ export default function AIPowered() {
                         item.media.endsWith(".avi") ||
                         item.media.endsWith(".webm") ? (
                         <video
-                          src={`http://localhost:5000/${item.media}`}
+                          src={preview}
                           className="h-14 w-14 object-cover rounded-lg mx-auto"
                           muted
                         />

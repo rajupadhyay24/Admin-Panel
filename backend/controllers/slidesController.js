@@ -1,11 +1,16 @@
 // controllers/slidesController.js
+
 const prisma = require("../config/prisma");
-
+// const stripHtml = require("../utils/stripHtml");
 const fs = require("fs");
-/* ================= GET ALL ================= */
-const path = require("path"); // ✅ MUST include this
+const path = require("path");
 
-const Dir = path.join(__dirname, "../ "); // uploa
+
+const stripHtml = (html) => {
+  if (!html) return null;
+
+  return html.replace(/<[^>]*>/g, "").trim();
+};
 
 /* ================= GET ALL ================= */
 exports.getAll = async (req, res) => {
@@ -16,7 +21,6 @@ exports.getAll = async (req, res) => {
 
     res.json(slides);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Failed to fetch slides" });
   }
 };
@@ -26,19 +30,15 @@ exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
 
-    if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
-
     const slide = await prisma.slides.findUnique({
       where: { id },
     });
 
-    if (!slide) {
+    if (!slide)
       return res.status(404).json({ message: "Slide not found" });
-    }
 
     res.json(slide);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Failed to fetch slide" });
   }
 };
@@ -47,18 +47,23 @@ exports.getOne = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     const { title } = req.body;
-    const media = req.file ? ` /${req.file.filename}` : null;
+
+    const media = req.file
+      ? `uploads/${req.file.filename}`
+      : null;
 
     const slide = await prisma.slides.create({
       data: {
-        title: title || null,
+        title: title ? stripHtml(title) : null,
         media,
       },
     });
 
-    res.status(201).json({ message: "Slide Created", slide });
+    res.status(201).json({
+      message: "Slide Created",
+      slide,
+    });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Failed to create slide" });
   }
 };
@@ -67,41 +72,43 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const { title } = req.body;
-
-    if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
 
     const existing = await prisma.slides.findUnique({
       where: { id },
     });
 
-    if (!existing) {
+    if (!existing)
       return res.status(404).json({ message: "Slide not found" });
-    }
 
     let newMedia = existing.media;
 
-    // Handle file upload
-    if (req.file?.filename) {
+    if (req.file) {
       if (existing.media) {
         const oldPath = path.join(__dirname, "..", existing.media);
-        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+        if (fs.existsSync(oldPath)) {
+          fs.unlinkSync(oldPath);
+        }
       }
 
-      newMedia = ` /${req.file.filename}`;
+      newMedia = `uploads/${req.file.filename}`;
     }
 
     const updatedSlide = await prisma.slides.update({
       where: { id },
       data: {
-        title: title ?? existing.title,
+        title:
+          req.body.title !== undefined
+            ? stripHtml(req.body.title)
+            : existing.title,
         media: newMedia,
       },
     });
 
-    res.json({ message: "Slide Updated", slide: updatedSlide });
+    res.json({
+      message: "Slide Updated",
+      slide: updatedSlide,
+    });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Failed to update slide" });
   }
 };
@@ -111,20 +118,18 @@ exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);
 
-    if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
-
     const slide = await prisma.slides.findUnique({
       where: { id },
     });
 
-    if (!slide) {
+    if (!slide)
       return res.status(404).json({ message: "Slide not found" });
-    }
 
-    // Delete file from
     if (slide.media) {
       const filePath = path.join(__dirname, "..", slide.media);
-      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
     }
 
     await prisma.slides.delete({
@@ -133,7 +138,6 @@ exports.remove = async (req, res) => {
 
     res.json({ message: "Slide Deleted" });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Failed to delete slide" });
   }
 };

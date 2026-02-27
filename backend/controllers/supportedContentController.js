@@ -9,6 +9,14 @@ const stripHtml = (value) => {
     .trim();
 };
 
+/* ================= HELPER: BUILD IMAGE PATH ================= */
+const buildImagePath = (fileArray, existingImage = null) => {
+  if (fileArray && fileArray.length > 0) {
+    return `/uploads/${fileArray[0].filename}`; // ✅ Correct Path
+  }
+  return existingImage;
+};
+
 // ================= GET ALL =================
 exports.getAll = async (req, res) => {
   try {
@@ -42,9 +50,6 @@ exports.create = async (req, res) => {
   try {
     const files = req.files || {};
 
-    const buildImagePath = (fileArray) =>
-      fileArray?.[0] ? ` /${fileArray[0].filename}` : null;
-
     const data = {
       heading: stripHtml(req.body.heading) ?? null,
       paragraph1: stripHtml(req.body.paragraph1) ?? null,
@@ -56,6 +61,7 @@ exports.create = async (req, res) => {
     };
 
     await prisma.supported_content.create({ data });
+
     res.json({ message: "Created successfully" });
   } catch (error) {
     console.error(error);
@@ -72,10 +78,9 @@ exports.update = async (req, res) => {
     const existing = await prisma.supported_content.findUnique({
       where: { id },
     });
-    if (!existing) return res.status(404).json({ message: "Record not found" });
 
-    const buildImagePath = (fileArray, existingImage) =>
-      fileArray?.[0] ? ` /${fileArray[0].filename}` : existingImage;
+    if (!existing)
+      return res.status(404).json({ message: "Record not found" });
 
     const data = {
       heading: req.body.heading
@@ -109,10 +114,13 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
   try {
     const id = Number(req.params.id);
+
     const existing = await prisma.supported_content.findUnique({
       where: { id },
     });
-    if (!existing) return res.status(404).json({ message: "Record not found" });
+
+    if (!existing)
+      return res.status(404).json({ message: "Record not found" });
 
     await prisma.supported_content.delete({
       where: { id },

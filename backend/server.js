@@ -54,6 +54,7 @@ app.use("/api/smarter" , smarterRoutes);
 app.use("/api/ai-powered" , aiPoweredRoutes);
 app.use("/api/faqs" , faqsRoutes);
 app.use("/api/cms-faqs" , cmsFaqRoutes);
+app.use("/api/solution-images" , solutionImageRoutes);
 // app.use("/api/faqs" , faqsRoutes);
 // app.use("/api/faqs" , faqsRoutes);
 

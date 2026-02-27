@@ -4,9 +4,6 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-//   folder path
-const Dir = path.join(__dirname, "../ ");
-
 /* ======================= */
 /* HELPER: STRIP HTML */
 /* ======================= */
@@ -14,9 +11,9 @@ const stripHtml = (value) => {
   if (!value || typeof value !== "string") return null;
 
   const clean = value
-    .replace(/<[^>]*>/g, "") // remove HTML tags
-    .replace(/&nbsp;/g, " ") // replace &nbsp;
-    .replace(/\s+/g, " ") // remove extra spaces
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
 
   return clean.length ? clean : null;
@@ -28,7 +25,7 @@ const stripHtml = (value) => {
 const deleteImage = (imagePath) => {
   if (!imagePath) return;
 
-  const fullPath = path.join(__dirname, "../", imagePath);
+  const fullPath = path.join(__dirname, "..", imagePath);
 
   if (fs.existsSync(fullPath)) {
     try {
@@ -61,13 +58,15 @@ exports.getAll = async (req, res) => {
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
-    if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+    if (isNaN(id))
+      return res.status(400).json({ message: "Invalid ID" });
 
     const data = await prisma.what_section.findUnique({
       where: { id },
     });
 
-    if (!data) return res.status(404).json({ message: "Record not found" });
+    if (!data)
+      return res.status(404).json({ message: "Record not found" });
 
     res.json(data);
   } catch (error) {
@@ -88,7 +87,9 @@ exports.create = async (req, res) => {
       return res.status(400).json({ message: "Title is required" });
     }
 
-    const imagePath = req.file ? ` /${req.file.filename}` : null;
+    const imagePath = req.file
+      ? `uploads/${req.file.filename}`
+      : null;
 
     const created = await prisma.what_section.create({
       data: {
@@ -114,21 +115,25 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
-    if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+    if (isNaN(id))
+      return res.status(400).json({ message: "Invalid ID" });
 
     const oldData = await prisma.what_section.findUnique({
       where: { id },
     });
 
-    if (!oldData) return res.status(404).json({ message: "Record not found" });
+    if (!oldData)
+      return res.status(404).json({ message: "Record not found" });
 
     let imagePath = oldData.image;
 
+    // If new file uploaded
     if (req.file) {
       if (oldData.image) {
         deleteImage(oldData.image);
       }
-      imagePath = ` /${req.file.filename}`;
+
+      imagePath = `uploads/${req.file.filename}`;
     }
 
     const updated = await prisma.what_section.update({
@@ -164,13 +169,15 @@ exports.update = async (req, res) => {
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);
-    if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+    if (isNaN(id))
+      return res.status(400).json({ message: "Invalid ID" });
 
     const oldData = await prisma.what_section.findUnique({
       where: { id },
     });
 
-    if (!oldData) return res.status(404).json({ message: "Record not found" });
+    if (!oldData)
+      return res.status(404).json({ message: "Record not found" });
 
     if (oldData.image) {
       deleteImage(oldData.image);

@@ -3,11 +3,11 @@ const router = express.Router();
 const multer = require("multer");
 
 const {
-  createSubCat,
-  getAllSubCats,
-  getSingleSubCat,
-  updateSubCat,
-  deleteSubCat,
+  create,
+  getAll,
+  getOne,
+  update,
+  remove,
 } = require("../controllers/solutionSubCatController");
 
 // =============================
@@ -27,20 +27,11 @@ const upload = multer({ storage });
 // =============================
 // Routes
 // =============================
-router.post(
-  "/",
-  upload.fields([{ name: "image2", maxCount: 20 }]),
-  createSubCat
-);
+router.post("/", upload.array("image2"), create);
+router.put("/:id", upload.array("image2"), update);
 
-router.put(
-  "/:id",
-  upload.fields([{ name: "image2", maxCount: 20 }]),
-  updateSubCat
-);
-
-router.get("/", getAllSubCats);
-router.get("/:id", getSingleSubCat);
-router.delete("/:id", deleteSubCat);
+router.get("/", getAll);
+router.get("/:id", getOne);
+router.delete("/:id", remove);
 
 module.exports = router;

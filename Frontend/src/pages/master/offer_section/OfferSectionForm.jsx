@@ -41,7 +41,7 @@ export default function OfferSectionForm() {
           [1,2].forEach((num) => {
             if (res.data[`image${num}`]) {
               images[`image${num}`] =
-                `http://localhost:5000/ /${res.data[`image${num}`]}`;
+                `http://localhost:5000/${res.data[`image${num}`]}`;
             }
           });
           setPreview(images);

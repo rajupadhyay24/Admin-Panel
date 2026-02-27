@@ -153,7 +153,7 @@ export default function TestimonialForm() {
 
               {preview[`image${num}`] && (
                 <img
-                  src={`http://localhost:5000/ /${preview[`image${num}`]}`}
+                  src={`http://localhost:5000/${preview[`image${num}`]}`}
                   className="h-20 mt-3"
                   alt=""
                 />

@@ -1,13 +1,10 @@
-// controllers/smarterController.js
 const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-const Dir = path.join(__dirname, "../ ");
+const ROOT_DIR = path.join(__dirname, "../"); // ✅ fixed (no space)
 
-/* ======================= */
-/* HELPER: STRIP HTML */
-/* ======================= */
+/* ================= STRIP HTML ================= */
 const stripHtml = (value) => {
   if (!value || typeof value !== "string") return null;
 
@@ -20,14 +17,11 @@ const stripHtml = (value) => {
   return clean.length ? clean : null;
 };
 
-/* ======================= */
-/* HELPER: Delete File */
-/* ======================= */
+/* ================= DELETE FILE ================= */
 const deleteFile = (filePathFromDb) => {
   if (!filePathFromDb) return;
 
-  const filename = filePathFromDb.replace(" /", "");
-  const fullPath = path.join(Dir, filename);
+  const fullPath = path.join(ROOT_DIR, filePathFromDb);
 
   if (fs.existsSync(fullPath)) {
     try {
@@ -87,8 +81,11 @@ exports.create = async (req, res) => {
     let media_type = null;
 
     if (req.file) {
-      media = ` /${req.file.filename}`;
-      media_type = req.file.mimetype.startsWith("video") ? "video" : "image";
+      // ✅ save full relative path properly
+      media = `uploads/${req.file.filename}`;
+      media_type = req.file.mimetype.startsWith("video")
+        ? "video"
+        : "image";
     }
 
     await prisma.smarter_section.create({
@@ -123,17 +120,21 @@ exports.update = async (req, res) => {
     let media_type = existing.media_type;
 
     if (req.file) {
-      deleteFile(existing.media); // delete old file
+      deleteFile(existing.media);
 
-      media = ` /${req.file.filename}`;
-      media_type = req.file.mimetype.startsWith("video") ? "video" : "image";
+      media = `uploads/${req.file.filename}`; // ✅ fixed
+      media_type = req.file.mimetype.startsWith("video")
+        ? "video"
+        : "image";
     }
 
     const cleanHeading = req.body.heading
       ? stripHtml(req.body.heading)
       : existing.heading;
 
-    const cleanPara = req.body.para ? stripHtml(req.body.para) : existing.para;
+    const cleanPara = req.body.para
+      ? stripHtml(req.body.para)
+      : existing.para;
 
     await prisma.smarter_section.update({
       where: { id },

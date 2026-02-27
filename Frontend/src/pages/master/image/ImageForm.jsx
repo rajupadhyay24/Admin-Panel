@@ -30,7 +30,7 @@ export default function ImageForm() {
 
           if (res.data.image)
             setPreview({
-              image: `http://localhost:5000/ /${res.data.image}`,
+              image: `http://localhost:5000/${res.data.image}`,
             });
         });
     }

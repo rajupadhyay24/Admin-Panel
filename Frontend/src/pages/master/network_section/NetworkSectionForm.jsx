@@ -1,0 +1,186 @@
+import {
+  Card,
+  Typography,
+  Button,
+} from "@material-tailwind/react";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import axios from "axios";
+
+export default function NetworkSectionForm() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const [formData, setFormData] = useState({
+    heading: "",
+    paragraph1: "",
+    paragraph2: "",
+    image1: null,
+    image2: null,
+    image3: null,
+    image4: null,
+  });
+
+  const [preview, setPreview] = useState({});
+
+  // ================= FETCH DATA FOR EDIT =================
+  useEffect(() => {
+    if (id) {
+      axios
+        .get(`http://localhost:5000/api/networksection/${id}`)
+        .then((res) => {
+          const data = res.data;
+
+          // formData me purani images ka filename store kar rahe
+          setFormData({
+            heading: data.heading || "",
+            paragraph1: data.paragraph1 || "",
+            paragraph2: data.paragraph2 || "",
+            image1: data.image1 || null,
+            image2: data.image2 || null,
+            image3: data.image3 || null,
+            image4: data.image4 || null,
+          });
+
+          // preview me URL for frontend
+          setPreview({
+            image1: data.image1 ? `http://localhost:5000/${data.image1}` : null,
+            image2: data.image2 ? `http://localhost:5000/${data.image2}` : null,
+            image3: data.image3 ? `http://localhost:5000/${data.image3}` : null,
+            image4: data.image4 ? `http://localhost:5000/${data.image4}` : null,
+          });
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [id]);
+
+  // ================= CKEditor CHANGE =================
+  const handleEditorChange = (field, editor) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: editor.getData(),
+    }));
+  };
+
+  // ================= FILE CHANGE =================
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    if (!files[0]) return;
+
+    // formData me File object store karo
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files[0],
+    }));
+
+    // preview ke liye URL
+    setPreview((prev) => ({
+      ...prev,
+      [name]: URL.createObjectURL(files[0]),
+    }));
+  };
+
+  // ================= SUBMIT =================
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = new FormData();
+
+    // Text fields
+    ["heading", "paragraph1", "paragraph2"].forEach((key) => {
+      if (formData[key]) data.append(key, formData[key]);
+    });
+
+    // Images
+    ["image1", "image2", "image3", "image4"].forEach((key) => {
+      if (formData[key] instanceof File) {
+        // Nayi file
+        data.append(key, formData[key]);
+      } else if (formData[key]) {
+        // Purani image filename
+        data.append(key, formData[key]);
+      }
+    });
+
+    try {
+      if (id) {
+        // UPDATE
+        await axios.put(
+          `http://localhost:5000/api/networksection/${id}`,
+          data,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+      } else {
+        // CREATE
+        await axios.post(
+          "http://localhost:5000/api/networksection",
+          data,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+      }
+
+      navigate("/dashboard/master/network-section");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to save");
+    }
+  };
+
+  return (
+    <div className="mt-12 mb-8 px-6">
+      <Card className="w-full p-10">
+        <form onSubmit={handleSubmit} className="space-y-6">
+
+          {/* Heading */}
+          <Typography>Heading</Typography>
+          <CKEditor
+            editor={ClassicEditor}
+            data={formData.heading || ""}
+            onChange={(e, editor) => handleEditorChange("heading", editor)}
+          />
+
+          {/* Paragraph 1 */}
+          <Typography>Paragraph 1</Typography>
+          <CKEditor
+            editor={ClassicEditor}
+            data={formData.paragraph1 || ""}
+            onChange={(e, editor) => handleEditorChange("paragraph1", editor)}
+          />
+
+          {/* Paragraph 2 */}
+          <Typography>Paragraph 2</Typography>
+          <CKEditor
+            editor={ClassicEditor}
+            data={formData.paragraph2 || ""}
+            onChange={(e, editor) => handleEditorChange("paragraph2", editor)}
+          />
+
+          {/* Images */}
+          {[1, 2, 3, 4].map((num) => (
+            <div key={num}>
+              <Typography>Image {num}</Typography>
+              <input
+                type="file"
+                name={`image${num}`}
+                onChange={handleFileChange}
+              />
+              {preview[`image${num}`] && (
+                <img
+                  src={preview[`image${num}`]}
+                  className="h-20 mt-2"
+                  alt={`Image ${num}`}
+                />
+              )}
+            </div>
+          ))}
+
+          <Button type="submit" fullWidth>
+            Save
+          </Button>
+        </form>
+      </Card>
+    </div>
+  );
+}

@@ -1,209 +1,193 @@
-const db = require("../config/db");
+const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-// =============================
-// CREATE
-// =============================
-exports.createSubCat = (req, res) => {
-  const { solutionCatId, para1, para2 } = req.body;
-  console.log("🔥 CREATE SUB CATEGORY API HIT");
-  console.log("BODY:", req.body);
-  console.log("FILES:", req.files);
+/* =============================== */
+/* STRIP HTML */
+/* =============================== */
+const stripHtml = (value) => {
+  if (!value || typeof value !== "string") return value;
+  return value.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
+};
 
-  if (!solutionCatId) {
-    return res.status(400).json({
-      message: "Solution Category required",
-    });
+/* =============================== */
+/* BUILD IMAGE PATHS */
+/* =============================== */
+const buildImagePaths = (fileArray) => {
+  if (!fileArray || fileArray.length === 0) return null;
+  const paths = fileArray.map((file) => "uploads/" + file.filename);
+  return JSON.stringify(paths);   // 🔥 IMPORTANT
+};
+
+/* =============================== */
+/* DELETE MULTIPLE IMAGES */
+/* =============================== */
+const deleteImages = (imageString) => {
+  if (!imageString) return;
+
+  let imageArray = [];
+  try {
+    imageArray = JSON.parse(imageString);
+  } catch {
+    return;
   }
 
-  const imageFiles = req.files?.image2 || [];
-  const images = imageFiles.map(file => file.filename);
+  imageArray.forEach((img) => {
+    const fullPath = path.join(__dirname, "../", img);
+    if (fs.existsSync(fullPath)) {
+      fs.unlinkSync(fullPath);
+    }
+  });
+};
 
-  const sql = `
-    INSERT INTO solution_sub_categories
-    (solutionCatId, para1, para2, image2)
-    VALUES (?, ?, ?, ?)
-  `;
+/* =============================== */
+/* CREATE */
+/* =============================== */
+exports.create = (req, res) => {
+  const files = req.files || [];
 
-  db.query(
-    sql,
-    [solutionCatId, para1, para2, JSON.stringify(images)],
-    (err, result) => {
-      if (err) {
-        console.log("INSERT ERROR:", err);
-        return res.status(500).json(err);
-      }
+  const data = {
+    solutionCatId: req.body.solutionCatId
+      ? parseInt(req.body.solutionCatId)
+      : null,
 
+    para1: stripHtml(req.body.para1) ?? null,
+    para2: stripHtml(req.body.para2) ?? null,
+
+    image2: buildImagePaths(files),   // ✅ FIXED
+  };
+
+  prisma.solution_sub_categories.create({ data })
+    .then((created) => {
       res.status(201).json({
-        message: "Inserted Successfully",
+        message: "Solution Sub Category created successfully",
+        data: created,
       });
-    }
-  );
-};
-
-// =============================
-// GET ALL (JOIN WITH solution_cat)
-// =============================
-exports.getAllSubCats = (req, res) => {
-  const sql = `
-    SELECT 
-      ssc.id,
-      ssc.solutionCatId,
-      ssc.para1,
-      ssc.para2,
-      ssc.image2,
-      sc.title,
-      sc.image
-    FROM solution_sub_categories ssc
-    JOIN solution_cat sc
-      ON ssc.solutionCatId = sc.id
-    ORDER BY ssc.id DESC
-  `;
-
-  db.query(sql, (err, rows) => {
-    if (err) {
-      console.log("GET ALL ERROR:", err);
-      return res.status(500).json(err);
-    }
-
-    rows.forEach((row) => {
-      try {
-        row.image2 = row.image2 ? JSON.parse(row.image2) : [];
-      } catch {
-        row.image2 = [];
-      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ message: "Failed to create" });
     });
-
-    res.json(rows);
-  });
+};
+/* =============================== */
+/* GET ALL */
+/* =============================== */
+exports.getAll = (req, res) => {
+  prisma.solution_sub_categories.findMany({
+    orderBy: { id: "desc" },
+    include: {
+      solution_cat: true,   // 🔥 THIS IS IMPORTANT
+    },
+  })
+    .then((data) => res.json(data))
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ message: "Failed to fetch" });
+    });
 };
 
-// =============================
-// GET SINGLE
-// =============================
-exports.getSingleSubCat = (req, res) => {
-  const { id } = req.params;
+/* =============================== */
+/* GET ONE */
+/* =============================== */
+exports.getOne = (req, res) => {
+  const id = parseInt(req.params.id);
 
-  const sql = `
-    SELECT *
-    FROM solution_sub_categories
-    WHERE id = ?
-  `;
+  if (isNaN(id))
+    return res.status(400).json({ message: "Invalid ID" });
 
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      console.log("GET SINGLE ERROR:", err);
-      return res.status(500).json(err);
-    }
+  prisma.solution_sub_categories.findUnique({
+    where: { id },
+    include: {
+      solution_cat: true,   // 🔥 ADD THIS
+    },
+  })
+    .then((data) => {
+      if (!data)
+        return res.status(404).json({ message: "Not found" });
 
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Not Found" });
-    }
-
-    const data = result[0];
-
-    try {
-      data.image2 = data.image2 ? JSON.parse(data.image2) : [];
-    } catch {
-      data.image2 = [];
-    }
-
-    res.json(data);
-  });
+      res.json(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ message: "Failed to fetch" });
+    });
 };
+/* =============================== */
+/* UPDATE */
+/* =============================== */
+exports.update = (req, res) => {
+  const id = parseInt(req.params.id);
+  const files = req.files || [];
 
-// =============================
-// UPDATE (ONLY para1, para2, image2)
-// =============================
-exports.updateSubCat = (req, res) => {
-  const { solutionCatId, para1, para2 } = req.body;
+  if (isNaN(id))
+    return res.status(400).json({ message: "Invalid ID" });
 
-  let newImages = req.files?.image2
-    ? req.files.image2.map(file => file.filename)
-    : null;
+  prisma.solution_sub_categories.findUnique({ where: { id } })
+    .then((existing) => {
+      if (!existing)
+        return res.status(404).json({ message: "Not found" });
 
-  // First get existing images
-  db.query(
-    "SELECT image2 FROM solution_sub_categories WHERE id = ?",
-    [req.params.id],
-    (err, rows) => {
-      if (err) return res.status(500).json(err);
+      let image2 = existing.image2;
 
-      const existingImages = rows[0]?.image2
-        ? JSON.parse(rows[0].image2)
-        : [];
-
-      const finalImages = newImages
-        ? [...existingImages, ...newImages]
-        : existingImages;
-
-      const sql = `
-        UPDATE solution_sub_categories 
-        SET solutionCatId = ?, para1 = ?, para2 = ?, image2 = ?
-        WHERE id = ?
-      `;
-
-      db.query(
-        sql,
-        [
-          solutionCatId,
-          para1,
-          para2,
-          JSON.stringify(finalImages),
-          req.params.id
-        ],
-        (err, result) => {
-          if (err) return res.status(500).json(err);
-          res.json({ message: "Updated successfully" });
-        }
-      );
-    }
-  );
-};
-
-// =============================
-// DELETE
-// =============================
-exports.deleteSubCat = (req, res) => {
-  const { id } = req.params;
-
-  db.query(
-    "SELECT image2 FROM solution_sub_categories WHERE id = ?",
-    [id],
-    (err, result) => {
-      if (err) return res.status(500).json(err);
-
-      let images = [];
-
-      if (result.length > 0 && result[0].image2) {
-        try {
-          images = JSON.parse(result[0].image2);
-        } catch {
-          images = [];
-        }
+      if (files.length > 0) {
+        deleteImages(existing.image2);
+        image2 = buildImagePaths(files);   // ✅ FIXED
       }
 
-      images.forEach((img) => {
-        const filePath = path.join(
-          __dirname,
-          "../uploads",
-          img
-        );
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
+      return prisma.solution_sub_categories.update({
+        where: { id },
+        data: {
+          solutionCatId: req.body.solutionCatId
+            ? parseInt(req.body.solutionCatId)
+            : existing.solutionCatId,
+
+          para1: req.body.para1 !== undefined
+            ? stripHtml(req.body.para1)
+            : existing.para1,
+
+          para2: req.body.para2 !== undefined
+            ? stripHtml(req.body.para2)
+            : existing.para2,
+
+          image2,
+        },
       });
+    })
+    .then((updated) => {
+      res.json({
+        message: "Updated successfully",
+        data: updated,
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ message: "Failed to update" });
+    });
+};
 
-      db.query(
-        "DELETE FROM solution_sub_categories WHERE id = ?",
-        [id],
-        (err) => {
-          if (err) return res.status(500).json(err);
+/* =============================== */
+/* DELETE */
+/* =============================== */
+exports.remove = (req, res) => {
+  const id = parseInt(req.params.id);
 
-          res.json({ message: "Deleted Successfully" });
-        }
-      );
-    }
-  );
+  if (isNaN(id))
+    return res.status(400).json({ message: "Invalid ID" });
+
+  prisma.solution_sub_categories.findUnique({ where: { id } })
+    .then((existing) => {
+      if (!existing)
+        return res.status(404).json({ message: "Not found" });
+
+      deleteImages(existing.image2);
+
+      return prisma.solution_sub_categories.delete({ where: { id } });
+    })
+    .then(() => {
+      res.json({ message: "Deleted successfully" });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ message: "Failed to delete" });
+    });
 };

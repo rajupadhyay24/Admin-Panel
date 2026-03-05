@@ -64,7 +64,8 @@ import Faqs from "./pages/master/faqs/Faqs";
 import FaqsForm from "./pages/master/faqs/FaqsForm";
 import AboutUsBenefits from "./pages/cms/about_us_benefits/AboutUsBenefits";
 import AboutUsBenefitsForm from "./pages/cms/about_us_benefits/AboutUsBenefitsForm";
-
+import ContactMessages from "./pages/master/contact_messages/ContactMessages";
+import ContactMessageForm from "./pages/master/contact_messages/ContactMessagesForm";
 
 
 const icon = {
@@ -75,54 +76,54 @@ export const routes = [
   {
     layout: "dashboard",
     pages: [
-         {
+      {
         icon: <HomeIcon {...icon} />,
         name: "dashboard",
         path: "/home",
         element: <Home />,
       },
       //SOLUTION CAT
-{
-  name: "solution category",
-  path: "/solution/solution-cat",
-  element: <SolutionCat />,
-},
-{
-  path: "/solution/solution-cat/add",
-  element: <SolutionCatForm />,
-},
-{
-  path: "/solution/solution-cat/edit/:id",
-  element: <SolutionCatForm />,
-},
-//SOLUTION SUB CAT
-{
-  name: "solution category",
-  path: "/solution/solution-sub-cat",
-  element: <SolutionSubCat />,
-},
-{
-  path: "/solution/solution-sub-cat/add",
-  element: <SolutionSubCatForm />,
-},
-{
-  path: "/solution/solution-sub-cat/edit/:id",
-  element: <SolutionSubCatForm />,
-},
-//SOLUTION IMAGE FORM
-{
-  name: "solution image",
-  path: "/solution/solution-images",
-  element: <SolutionImage />,
-},
-{
-  path: "/solution/solution-images/add",
-  element: <SolutionImageForm/>,
-},
-{
-  path: "/solution/solution-images/edit/:id",
-  element: <SolutionImageForm />,
-},
+      {
+        name: "solution category",
+        path: "/solution/solution-cat",
+        element: <SolutionCat />,
+      },
+      {
+        path: "/solution/solution-cat/add",
+        element: <SolutionCatForm />,
+      },
+      {
+        path: "/solution/solution-cat/edit/:id",
+        element: <SolutionCatForm />,
+      },
+      //SOLUTION SUB CAT
+      {
+        name: "solution category",
+        path: "/solution/solution-sub-cat",
+        element: <SolutionSubCat />,
+      },
+      {
+        path: "/solution/solution-sub-cat/add",
+        element: <SolutionSubCatForm />,
+      },
+      {
+        path: "/solution/solution-sub-cat/edit/:id",
+        element: <SolutionSubCatForm />,
+      },
+      //SOLUTION IMAGE FORM
+      {
+        name: "solution image",
+        path: "/solution/solution-images",
+        element: <SolutionImage />,
+      },
+      {
+        path: "/solution/solution-images/add",
+        element: <SolutionImageForm />,
+      },
+      {
+        path: "/solution/solution-images/edit/:id",
+        element: <SolutionImageForm />,
+      },
       // CMS ROUTES
       //About Us
       {
@@ -139,37 +140,37 @@ export const routes = [
         path: "/cms/about-us/edit/:id",
         element: <AboutUsForm />,
       },
-// ABOUT US ENTERPRISE
-{
-  icon: <DocumentTextIcon {...icon} />,
-  name: "about us enterprise",
-  path: "/cms/about-us-enterprise",
-  element: <AboutUsEnterprise />,
-},
-{
-  path: "/cms/about-us-enterprise/add",
-  element: <AboutUsEnterpriseForm />,
-},
-{
-  path: "/cms/about-us-enterprise/edit/:id",
-  element: <AboutUsEnterpriseForm />,
-},
-//ABOUT US BENEFITS
-// ABOUT US ENTERPRISE
-{
-  icon: <DocumentTextIcon {...icon} />,
-  name: "about us enterprise",
-  path: "/cms/about-us-benefits",
-  element: <AboutUsBenefits />,
-},
-{
-  path: "/cms/about-us-benefits/add",
-  element: <AboutUsBenefitsForm/>,
-},
-{
-  path: "/cms/about-us-benefits/edit/:id",
-  element: <AboutUsBenefitsForm/>,
-},
+      // ABOUT US ENTERPRISE
+      {
+        icon: <DocumentTextIcon {...icon} />,
+        name: "about us enterprise",
+        path: "/cms/about-us-enterprise",
+        element: <AboutUsEnterprise />,
+      },
+      {
+        path: "/cms/about-us-enterprise/add",
+        element: <AboutUsEnterpriseForm />,
+      },
+      {
+        path: "/cms/about-us-enterprise/edit/:id",
+        element: <AboutUsEnterpriseForm />,
+      },
+      //ABOUT US BENEFITS
+      // ABOUT US ENTERPRISE
+      {
+        icon: <DocumentTextIcon {...icon} />,
+        name: "about us enterprise",
+        path: "/cms/about-us-benefits",
+        element: <AboutUsBenefits />,
+      },
+      {
+        path: "/cms/about-us-benefits/add",
+        element: <AboutUsBenefitsForm />,
+      },
+      {
+        path: "/cms/about-us-benefits/edit/:id",
+        element: <AboutUsBenefitsForm />,
+      },
 
       // //Solution
       // {
@@ -458,6 +459,21 @@ export const routes = [
       {
         path: "/master/faqs/edit/:id",
         element: <FaqsForm />,
+      },
+      // CONTACT MESSAGES
+      {
+        icon: <Cog6ToothIcon {...icon} />,
+        name: "contact-messages",
+        path: "/master/contact-messages",
+        element: <ContactMessages />,
+      },
+      {
+        path: "/master/contact-messages/add",
+        element: <ContactMessageForm />,
+      },
+      {
+        path: "/master/contact-messages/edit/:id",
+        element: <ContactMessageForm />,
       },
 
 

@@ -25,7 +25,7 @@ const cmsFaqRoutes = require("./routes/cmsFaqRoutes");
 const solutionCatRoutes = require("./routes/solutionCatRoutes");
 const solutionSubCatRoutes = require("./routes/solutionSubCatRoutes");
 const solutionImageRoutes = require("./routes/solutionImageRoutes");
-
+const contactMessagesRoutes = require("./routes/contactMessagesRoutes");
 const app = express();
 
 app.use(cors());
@@ -57,7 +57,7 @@ app.use("/api/cms-faqs" , cmsFaqRoutes);
 app.use("/api/solution-images" , solutionImageRoutes);
 // app.use("/api/faqs" , faqsRoutes);
 // app.use("/api/faqs" , faqsRoutes);
-
+app.use("/api/contact-messages", contactMessagesRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);

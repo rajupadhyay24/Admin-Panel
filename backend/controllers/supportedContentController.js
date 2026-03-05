@@ -12,7 +12,7 @@ const stripHtml = (value) => {
 /* ================= HELPER: BUILD IMAGE PATH ================= */
 const buildImagePath = (fileArray, existingImage = null) => {
   if (fileArray && fileArray.length > 0) {
-    return `/uploads/${fileArray[0].filename}`; // ✅ Correct Path
+    return `uploads/${fileArray[0].filename}`; // ✅ Correct Path
   }
   return existingImage;
 };

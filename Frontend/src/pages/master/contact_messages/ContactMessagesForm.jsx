@@ -213,7 +213,7 @@ export default function ContactMessageForm() {
 
                         <div className="md:col-span-2 flex justify-end gap-4 pt-6 border-t">
 
-                            <Button
+                            {/* <Button
                                 variant="outlined"
                                 color="blue-gray"
                                 onClick={() =>
@@ -231,8 +231,8 @@ export default function ContactMessageForm() {
 
                                 {loading ? "Saving..." : "Save Message"}
 
-                            </Button>
-
+                            </Button> */}
+                            <Button type="submit" fullWidth>Save</Button>
                         </div>
 
                     </form>

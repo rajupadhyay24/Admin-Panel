@@ -52,14 +52,12 @@ exports.createMessage = (req, res) => {
             }
 
             res.status(201).json({
-                message: "Message added successfully",
+                message: " The Messages are added successfully",
             });
         }
     );
 };
 
-
-// ✅ Update Message
 exports.updateMessage = (req, res) => {
     const { id } = req.params;
 
@@ -71,12 +69,10 @@ exports.updateMessage = (req, res) => {
             });
         }
 
-        res.json({ message: "Message updated successfully" });
+        res.json({ message: "The Messages are updated successfully" });
     });
 };
 
-
-// ✅ Delete Message
 exports.deleteMessage = (req, res) => {
     const { id } = req.params;
 
@@ -88,6 +84,6 @@ exports.deleteMessage = (req, res) => {
             });
         }
 
-        res.json({ message: "Message deleted successfully" });
+        res.json({ message: "The Messages are deleted successfully" });
     });
 };

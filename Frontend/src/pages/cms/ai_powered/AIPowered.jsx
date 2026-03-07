@@ -13,7 +13,7 @@ export default function AIPowered() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [preview, setPreview] = useState(null);
-
+const [selectedVideo, setSelectedVideo] = useState(null);
   const fetchData = async () => {
     const res = await axios.get("http://localhost:5000/api/ai-powered");
     setData(res.data);
@@ -116,11 +116,20 @@ export default function AIPowered() {
                         item.media.endsWith(".mov") ||
                         item.media.endsWith(".avi") ||
                         item.media.endsWith(".webm") ? (
+                       
+
+
                         <video
-                          src={preview}
-                          className="h-14 w-14 object-cover rounded-lg mx-auto"
-                          muted
-                        />
+  src={`http://localhost:5000/${item.media}`}
+  className="h-14 w-14 object-cover rounded-lg mx-auto cursor-pointer"
+  muted
+  autoPlay
+  loop
+  playsInline
+  onClick={() =>
+    setSelectedVideo(`http://localhost:5000/${item.media}`)
+  }
+/>    
                       ) : (
                         <img
                           src={`http://localhost:5000/${item.media}`}
@@ -130,6 +139,29 @@ export default function AIPowered() {
                       )
                     )}
                   </td>
+{selectedVideo && (
+  <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+    <div className="relative bg-white p-4 rounded-xl w-[90%] md:w-[700px]">
+      
+      {/* Close Button */}
+      <button
+        className="absolute top-2 right-3 text-xl font-bold"
+        onClick={() => setSelectedVideo(null)}
+      >
+        ✕
+      </button>
+
+      <video
+        src={selectedVideo}
+        controls
+        autoPlay
+        className="w-full rounded-lg"
+      />
+    </div>
+  </div>
+)}
+
+
 
                   <td className="border-blue-gray-200 border px-4 py-3">
                     <div className="flex gap-2">

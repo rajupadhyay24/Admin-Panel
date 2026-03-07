@@ -66,7 +66,10 @@ exports.getOne = async (req, res) => {
 ================================ */
 exports.create = async (req, res) => {
   try {
+    console.log("the request data in the body is the ", req.body);
+    // const { faq_id, para } = req.body.faq;
     const { faq_id } = req.body;
+    // const cleanPara = stripHtml(para);
     const cleanPara = stripHtml(req.body.para);
 
     if (!faq_id || !cleanPara) {
@@ -81,6 +84,7 @@ exports.create = async (req, res) => {
         para: cleanPara,
       },
     });
+
 
     res.json({ message: "Created successfully" });
   } catch (err) {

@@ -47,7 +47,17 @@ exports.create = async (req, res) => {
 
     const files = req.files || [];
 
+<<<<<<< HEAD
     const data = {
+=======
+    input1: req.body.input1 ?? null,
+    input2: req.body.input2 ?? null,
+    input3: req.body.input3 ?? null,
+    input4: req.body.input4 ?? null,
+
+    image2: buildImagePaths(files),   // ✅ FIXED
+  };
+>>>>>>> ae759aa9c6820c705e65ecfaf2e943c1b4c4d4c0
 
       solutionCatId: req.body.solutionCatId
         ? parseInt(req.body.solutionCatId)
@@ -161,8 +171,45 @@ exports.update = async (req, res) => {
 
     if (!existing) {
 
+<<<<<<< HEAD
       return res.status(404).json({
         message: "Not found",
+=======
+  prisma.solution_sub_categories.findUnique({ where: { id } })
+    .then((existing) => {
+      if (!existing)
+        return res.status(404).json({ message: "Not found" });
+
+      let image2 = existing.image2;
+
+      if (files.length > 0) {
+        deleteImages(existing.image2);
+        image2 = buildImagePaths(files);   // ✅ FIXED
+      }
+
+      return prisma.solution_sub_categories.update({
+        where: { id },
+        data: {
+          solutionCatId: req.body.solutionCatId
+            ? parseInt(req.body.solutionCatId)
+            : existing.solutionCatId,
+
+          para1: req.body.para1
+            ? stripHtml(req.body.para1)
+            : existing.para1,
+
+          para2: req.body.para2
+            ? stripHtml(req.body.para2)
+            : existing.para2,
+
+          input1: req.body.input1 || existing.input1,
+          input2: req.body.input2 || existing.input2,
+          input3: req.body.input3 || existing.input3,
+          input4: req.body.input4 || existing.input4,
+
+          image2,
+        }
+>>>>>>> ae759aa9c6820c705e65ecfaf2e943c1b4c4d4c0
       });
 
     }

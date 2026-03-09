@@ -28,12 +28,15 @@ const solutionImageRoutes = require("./routes/solutionImageRoutes");
 const enquiryRoutes = require("./routes/enquiryRoutes");
 
 
+const contactMessagesRoutes = require("./routes/contactMessagesRoutes");
+const systemArchitectureRoutes = require("./routes/systemArchitectureRoutes");
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
+app.use("/api/system-architecture",systemArchitectureRoutes);
 app.use("/api/about", aboutRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/aboutusenterprise", aboutUsEnterpriseRoutes);
@@ -59,6 +62,9 @@ app.use("/api/cms-faqs" , cmsFaqRoutes);
 app.use("/api/solution-images" , solutionImageRoutes);
 app.use("/api/enquiry", enquiryRoutes);
 
+// app.use("/api/faqs" , faqsRoutes);
+// app.use("/api/faqs" , faqsRoutes);
+app.use("/api/contact-messages", contactMessagesRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);

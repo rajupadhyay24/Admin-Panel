@@ -30,6 +30,17 @@ export default function SolutionSubCatForm() {
   para6: "",
   image2: []
 });
+    solutionCatId: "",
+    title: "",
+    image: "",
+    para1: "",
+    para2: "",
+    image2: [],
+    input1: "",
+    input2: "",
+    input3: "",
+    input4: "",
+  });
 
   const [previewImages, setPreviewImages] = useState([]);
 
@@ -63,6 +74,18 @@ export default function SolutionSubCatForm() {
           para6: data.para6 || "",
           image2: [],
         });
+          setFormData({
+            solutionCatId: data.solutionCatId || "",
+            title: data.title || "",
+            image: data.image || "",
+            para1: data.para1 || "",
+            para2: data.para2 || "",
+            image2: [],
+            input1: data.input1 || "",
+            input2: data.input2 || "",
+            input3: data.input3 || "",
+            input4: data.input4 || "",
+          });
 
           const existingImages =
             typeof data.image2 === "string"
@@ -120,6 +143,10 @@ export default function SolutionSubCatForm() {
     data.append("para4", formData.para4);
     data.append("para5", formData.para5);
     data.append("para6", formData.para6);
+    data.append("input1", formData.input1);
+    data.append("input2", formData.input2);
+    data.append("input3", formData.input3);
+    data.append("input4", formData.input4);
 
     formData.image2.forEach((file) => {
       data.append("image2", file);
@@ -294,6 +321,57 @@ export default function SolutionSubCatForm() {
               />
             ))}
           </div>
+
+          <Typography>Input 1</Typography>
+          <CKEditor
+            key={`input1-${id || "new"}`}
+            editor={ClassicEditor}
+            data={formData.input1 || ""}
+            onChange={(event, editor) =>
+              setFormData((prev) => ({
+                ...prev,
+                input1: editor.getData(),
+              }))
+            }
+          />
+
+          <Typography>Input 2</Typography>
+          <CKEditor
+            key={`input2-${id || "new"}`}
+            editor={ClassicEditor}
+            data={formData.input2 || ""}
+            onChange={(event, editor) =>
+              setFormData((prev) => ({
+                ...prev,
+                input2: editor.getData(),
+              }))
+            }
+          />
+          <Typography>Input 3</Typography>
+          <CKEditor
+            key={`input3-${id || "new"}`}
+            editor={ClassicEditor}
+            data={formData.input3 || ""}
+            onChange={(event, editor) =>
+              setFormData((prev) => ({
+                ...prev,
+                input3: editor.getData(),
+              }))
+            }
+          />
+
+          <Typography>Input 4</Typography>
+          <CKEditor
+            key={`input4-${id || "new"}`}
+            editor={ClassicEditor}
+            data={formData.input4 || ""}
+            onChange={(event, editor) =>
+              setFormData((prev) => ({
+                ...prev,
+                input4: editor.getData(),
+              }))
+            }
+          />
 
           <Button type="submit" fullWidth>
             {id ? "Update" : "Create"}

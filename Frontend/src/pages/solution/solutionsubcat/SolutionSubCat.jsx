@@ -74,6 +74,10 @@ export default function SolutionSubCat() {
                 <th className="border px-3 py-2">Para5</th>
                 <th className="border px-3 py-2">Para6</th>
                 <th className="border px-3 py-2">Image2</th>
+                <th className="border px-3 py-2">Input1</th>
+                <th className="border px-3 py-2">Input2</th>
+                <th className="border px-3 py-2">Input3</th>
+                <th className="border px-3 py-2">Input4</th>
                 <th className="border px-3 py-2">Action</th>
               </tr>
             </thead>
@@ -149,6 +153,13 @@ export default function SolutionSubCat() {
                     </td>
 
 
+                    <td className="border p-3 max-w-xs">{truncateText(item.input1)}</td>
+                    <td className="border p-3 max-w-xs">{truncateText(item.input2)}</td>
+                    <td className="border p-3 max-w-xs">{truncateText(item.input3)}</td>
+                    <td className="border p-3 max-w-xs">{truncateText(item.input4)}</td>
+
+
+                    {/* Actions */}
                     <td className="border p-3 space-x-2">
                       <Button
                         size="sm"
@@ -176,7 +187,7 @@ export default function SolutionSubCat() {
 
               {data.length === 0 && (
                 <tr>
-                  <td colSpan="7" className="text-center p-6">
+                  <td colSpan="11" className="text-center p-6">
                     No Data Found
                   </td>
                 </tr>

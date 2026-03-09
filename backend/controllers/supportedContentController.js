@@ -15,6 +15,7 @@ const stripHtml = (value) => {
 const buildImagePath = (fileArray, existingImage = null) => {
   if (fileArray && fileArray.length > 0) {
     return `uploads/${fileArray[0].filename}`;
+    return `uploads/${fileArray[0].filename}`; // ✅ Correct Path
   }
   return existingImage;
 };

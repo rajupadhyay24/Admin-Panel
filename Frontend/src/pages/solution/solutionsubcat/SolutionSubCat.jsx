@@ -7,6 +7,8 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import BASE_URL from "../../../configs/api";
+
 
 export default function SolutionSubCat() {
   const [data, setData] = useState([]);
@@ -18,7 +20,7 @@ export default function SolutionSubCat() {
 
   const fetchData = () => {
     axios
-      .get("http://localhost:5000/api/solution-sub-cat")
+      .get(`${BASE_URL}/api/solution-sub-cat`)
       .then((res) => setData(res.data))
       .catch((err) => console.log(err));
   };
@@ -26,7 +28,7 @@ export default function SolutionSubCat() {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure?")) {
       await axios.delete(
-        `http://localhost:5000/api/solution-sub-cat/${id}`
+        `${BASE_URL}/api/solution-sub-cat/${id}`
       );
       fetchData();
     }
@@ -67,6 +69,10 @@ export default function SolutionSubCat() {
                 <th className="border px-3 py-2">Image1</th>
                 <th className="border px-3 py-2">Full Details</th>
                 <th className="border px-3 py-2">Description</th>
+                <th className="border px-3 py-2">Para3</th>
+                <th className="border px-3 py-2">Para4</th>
+                <th className="border px-3 py-2">Para5</th>
+                <th className="border px-3 py-2">Para6</th>
                 <th className="border px-3 py-2">Image2</th>
                 <th className="border px-3 py-2">Action</th>
               </tr>
@@ -74,7 +80,7 @@ export default function SolutionSubCat() {
 
             <tbody>
               {data.map((item, index) => {
-                // SAFE image2 parsing
+
                 let images = [];
                 try {
                   images =
@@ -91,16 +97,16 @@ export default function SolutionSubCat() {
                       {index + 1}
                     </td>
 
-                    {/* Category Title */}
+
                     <td className="border p-3 font-semibold">
                       {item.solution_cat?.title || "No Category"}
                     </td>
 
-                    {/* Category Image */}
+
                     <td className="border p-3">
                       {item.solution_cat?.image ? (
                         <img
-                          src={`http://localhost:5000/${item.solution_cat.image}`}
+                          src={`${BASE_URL}/${item.solution_cat.image}`}
                           className="h-16 rounded"
                           alt={item.solution_cat.title}
                         />
@@ -109,24 +115,29 @@ export default function SolutionSubCat() {
                       )}
                     </td>
 
-                    {/* Para1 */}
+
                     <td className="border p-3 max-w-xs">
                       {truncateText(item.para1)}
                     </td>
 
-                    {/* Para2 */}
+
                     <td className="border p-3 max-w-xs">
                       {truncateText(item.para2)}
                     </td>
 
-                    {/* Multiple Images (image2) */}
+                      <td className="border p-3 max-w-xs">{truncateText(item.para3)}</td>
+                      <td className="border p-3 max-w-xs">{truncateText(item.para4)}</td>
+                      <td className="border p-3 max-w-xs">{truncateText(item.para5)}</td>
+                      <td className="border p-3 max-w-xs">{truncateText(item.para6)}</td>
+
+
                     <td className="border p-3">
                       <div className="flex gap-2 flex-wrap">
                         {images.length > 0 ? (
                           images.map((img, i) => (
                             <img
                               key={i}
-                              src={`http://localhost:5000/${img}`}
+                              src={`${BASE_URL}/${img}`}
                               className="h-12 rounded"
                               alt="multi"
                             />
@@ -137,7 +148,7 @@ export default function SolutionSubCat() {
                       </div>
                     </td>
 
-                    {/* Actions */}
+
                     <td className="border p-3 space-x-2">
                       <Button
                         size="sm"

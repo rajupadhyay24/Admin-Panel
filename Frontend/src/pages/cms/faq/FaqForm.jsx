@@ -8,6 +8,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import BASE_URL from "../../../configs/api";
+
 
 export default function FaqForm() {
   const navigate = useNavigate();
@@ -24,11 +26,11 @@ export default function FaqForm() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // 🔥 Load both together
+
         const [faqRes, singleRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/faqs"),
+          axios.get(`${BASE_URL}/api/faqs`),
           id
-            ? axios.get(`http://localhost:5000/api/cms-faqs/${id}`)
+            ? axios.get(`${BASE_URL}/api/cms-faqs/${id}`)
             : Promise.resolve(null),
         ]);
 
@@ -56,12 +58,12 @@ export default function FaqForm() {
 
     if (id) {
       await axios.put(
-        `http://localhost:5000/api/cms-faqs/${id}`,
+        `${BASE_URL}/api/cms-faqs/${id}`,
         formData
       );
     } else {
       await axios.post(
-        "http://localhost:5000/api/cms-faqs",
+        `${BASE_URL}/api/cms-faqs`,
         formData
       );
     }

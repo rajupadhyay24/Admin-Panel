@@ -1,4 +1,4 @@
-// controllers/slidesController.js
+
 
 const prisma = require("../config/prisma");
 // const stripHtml = require("../utils/stripHtml");

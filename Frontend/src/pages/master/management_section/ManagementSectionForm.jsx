@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function ManagementSectionForm() {
   const navigate = useNavigate();
@@ -20,12 +22,12 @@ export default function ManagementSectionForm() {
   });
 
   const [preview, setPreview] = useState({});
-  const [existingImages, setExistingImages] = useState({}); // store existing filenames
+  const [existingImages, setExistingImages] = useState({});
 
-  // Fetch existing record in edit mode
+
   useEffect(() => {
     if (id) {
-      axios.get(`http://localhost:5000/api/managementsection/${id}`)
+      axios.get(`${BASE_URL}/api/managementsection/${id}`)
         .then((res) => {
           const data = res.data;
 
@@ -40,10 +42,10 @@ export default function ManagementSectionForm() {
           });
 
           setPreview({
-            image1: data.image1 ? `http://localhost:5000/ /${data.image1}` : null,
-            image2: data.image2 ? `http://localhost:5000/ /${data.image2}` : null,
-            image3: data.image3 ? `http://localhost:5000/ /${data.image3}` : null,
-            image4: data.image4 ? `http://localhost:5000/ /${data.image4}` : null,
+            image1: data.image1 ? `${BASE_URL}/${data.image1}` : null,
+            image2: data.image2 ? `${BASE_URL}/${data.image2}` : null,
+            image3: data.image3 ? `${BASE_URL}/${data.image3}` : null,
+            image4: data.image4 ? `${BASE_URL}/${data.image4}` : null,
           });
 
           setExistingImages({
@@ -56,12 +58,12 @@ export default function ManagementSectionForm() {
     }
   }, [id]);
 
-  // CKEditor changes
+
   const handleEditorChange = (field, editor) => {
     setFormData(prev => ({ ...prev, [field]: editor.getData() }));
   };
 
-  // File input change
+
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     if (!files[0]) return;
@@ -70,35 +72,35 @@ export default function ManagementSectionForm() {
     setPreview(prev => ({ ...prev, [name]: URL.createObjectURL(files[0]) }));
   };
 
-  // Submit form
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
 
-    // Text fields
+
     ["heading", "paragraph1", "paragraph2"].forEach(key => {
       if (formData[key]) data.append(key, formData[key]);
     });
 
-    // Files: send new file OR fallback to existing filename
+
     ["image1", "image2", "image3", "image4"].forEach(key => {
       if (formData[key] instanceof File) {
-        data.append(key, formData[key]); // new file
+        data.append(key, formData[key]);
       } else if (existingImages[key]) {
-        data.append(key, existingImages[key]); // send existing filename
+        data.append(key, existingImages[key]);
       }
     });
 
     try {
       if (id) {
         await axios.put(
-          `http://localhost:5000/api/managementsection/${id}`,
+          `${BASE_URL}/api/managementsection/${id}`,
           data,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
       } else {
         await axios.post(
-          `http://localhost:5000/api/managementsection`,
+          `${BASE_URL}/api/managementsection`,
           data,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
@@ -136,7 +138,7 @@ export default function ManagementSectionForm() {
             onChange={(e, editor) => handleEditorChange("paragraph2", editor)}
           />
 
-          {[1,2,3,4].map(num => (
+          {[1, 2, 3, 4].map(num => (
             <div key={num}>
               <Typography>Image {num}</Typography>
               <input type="file" name={`image${num}`} onChange={handleFileChange} />

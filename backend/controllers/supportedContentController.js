@@ -1,6 +1,7 @@
 const prisma = require("../config/prisma");
 
-/* ================= HELPER: STRIP HTML ================= */
+
+
 const stripHtml = (value) => {
   if (!value || typeof value !== "string") return value;
   return value
@@ -9,15 +10,17 @@ const stripHtml = (value) => {
     .trim();
 };
 
-/* ================= HELPER: BUILD IMAGE PATH ================= */
+
+
 const buildImagePath = (fileArray, existingImage = null) => {
   if (fileArray && fileArray.length > 0) {
-    return `uploads/${fileArray[0].filename}`; // ✅ Correct Path
+    return `uploads/${fileArray[0].filename}`;
   }
   return existingImage;
 };
 
-// ================= GET ALL =================
+
+
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.supported_content.findMany({
@@ -30,7 +33,8 @@ exports.getAll = async (req, res) => {
   }
 };
 
-// ================= GET ONE =================
+
+
 exports.getById = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -45,7 +49,7 @@ exports.getById = async (req, res) => {
   }
 };
 
-// ================= CREATE =================
+
 exports.create = async (req, res) => {
   try {
     const files = req.files || {};
@@ -69,7 +73,7 @@ exports.create = async (req, res) => {
   }
 };
 
-// ================= UPDATE =================
+
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -110,7 +114,8 @@ exports.update = async (req, res) => {
   }
 };
 
-// ================= DELETE =================
+
+
 exports.delete = async (req, res) => {
   try {
     const id = Number(req.params.id);

@@ -2,17 +2,14 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* =============================== */
-/* STRIP HTML */
-/* =============================== */
 const stripHtml = (value) => {
   if (!value || typeof value !== "string") return value;
-  return value.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
+  return value
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .trim();
 };
 
-/* =============================== */
-/* BUILD IMAGE PATH */
-/* =============================== */
 const buildImagePath = (fileArray, existingImage = null) => {
   if (fileArray && fileArray.length > 0 && fileArray[0].filename) {
     return "uploads/" + fileArray[0].filename;
@@ -20,9 +17,6 @@ const buildImagePath = (fileArray, existingImage = null) => {
   return existingImage;
 };
 
-/* =============================== */
-/* DELETE IMAGE */
-/* =============================== */
 const deleteImage = (imagePath) => {
   if (!imagePath) return;
 
@@ -33,20 +27,15 @@ const deleteImage = (imagePath) => {
   }
 };
 
-/* =============================== */
-/* CREATE */
-/* =============================== */
 exports.create = (req, res) => {
   const files = req.files || {};
 
   const data = {};
 
-  // headings 1–8
   for (let i = 1; i <= 8; i++) {
     data[`heading${i}`] = stripHtml(req.body[`heading${i}`]) ?? null;
   }
 
-  // paragraphs 1–4
   for (let i = 1; i <= 4; i++) {
     data[`paragraph${i}`] = stripHtml(req.body[`paragraph${i}`]) ?? null;
   }
@@ -54,7 +43,8 @@ exports.create = (req, res) => {
   data.image1 = buildImagePath(files.image1);
   data.image2 = buildImagePath(files.image2);
 
-  prisma.aboutusbenefits.create({ data })
+  prisma.aboutusbenefits
+    .create({ data })
     .then((created) => {
       res.status(201).json({
         message: "About Us Benefits created successfully",
@@ -69,13 +59,11 @@ exports.create = (req, res) => {
     });
 };
 
-/* =============================== */
-/* GET ALL */
-/* =============================== */
 exports.getAll = (req, res) => {
-  prisma.aboutusbenefits.findMany({
-    orderBy: { id: "desc" },
-  })
+  prisma.aboutusbenefits
+    .findMany({
+      orderBy: { id: "desc" },
+    })
     .then((data) => res.json(data))
     .catch((error) => {
       console.error(error);
@@ -85,16 +73,13 @@ exports.getAll = (req, res) => {
     });
 };
 
-/* =============================== */
-/* GET ONE */
-/* =============================== */
 exports.getOne = (req, res) => {
   const id = parseInt(req.params.id);
 
-  if (isNaN(id))
-    return res.status(400).json({ message: "Invalid ID" });
+  if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
 
-  prisma.aboutusbenefits.findUnique({ where: { id } })
+  prisma.aboutusbenefits
+    .findUnique({ where: { id } })
     .then((data) => {
       if (!data)
         return res.status(404).json({
@@ -111,17 +96,14 @@ exports.getOne = (req, res) => {
     });
 };
 
-/* =============================== */
-/* UPDATE */
-/* =============================== */
 exports.update = (req, res) => {
   const id = parseInt(req.params.id);
   const files = req.files || {};
 
-  if (isNaN(id))
-    return res.status(400).json({ message: "Invalid ID" });
+  if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
 
-  prisma.aboutusbenefits.findUnique({ where: { id } })
+  prisma.aboutusbenefits
+    .findUnique({ where: { id } })
     .then((existing) => {
       if (!existing)
         return res.status(404).json({
@@ -181,16 +163,13 @@ exports.update = (req, res) => {
     });
 };
 
-/* =============================== */
-/* DELETE */
-/* =============================== */
 exports.remove = (req, res) => {
   const id = parseInt(req.params.id);
 
-  if (isNaN(id))
-    return res.status(400).json({ message: "Invalid ID" });
+  if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
 
-  prisma.aboutusbenefits.findUnique({ where: { id } })
+  prisma.aboutusbenefits
+    .findUnique({ where: { id } })
     .then((existing) => {
       if (!existing)
         return res.status(404).json({

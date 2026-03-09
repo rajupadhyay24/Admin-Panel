@@ -8,13 +8,14 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function AboutUs() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
-    const res = await axios.get("http://localhost:5000/api/about");
+    const res = await axios.get(`${BASE_URL}/api/about`);
     setData(res.data);
   };
 
@@ -23,7 +24,7 @@ export default function AboutUs() {
   }, []);
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/api/about/${id}`);
+    await axios.delete(`${BASE_URL}/api/about/${id}`);
     fetchData();
   };
 
@@ -68,7 +69,7 @@ export default function AboutUs() {
             <tbody>
               {data.map((item) => (
                 <tr key={item.id} className="hover:bg-blue-gray-50">
-                  
+
                   {/* Title */}
                   <td className="border border-blue-gray-200 px-4 py-3 align-top max-w-xs">
                     <div
@@ -103,7 +104,7 @@ export default function AboutUs() {
                   <td className="border border-blue-gray-200 px-4 py-3 text-center">
                     {item.image1 && (
                       <img
-                        src={`http://localhost:5000/${item.image1}`}
+                        src={`${BASE_URL}/${item.image1}`}
                         className="h-14 w-14 object-cover rounded-lg mx-auto"
                         alt=""
                       />
@@ -114,7 +115,7 @@ export default function AboutUs() {
                   <td className="border border-blue-gray-200 px-4 py-3 text-center">
                     {item.image2 && (
                       <img
-                        src={`http://localhost:5000/${item.image2}`}
+                        src={`${BASE_URL}/${item.image2}`}
                         className="h-14 w-14 object-cover rounded-lg mx-auto"
                         alt=""
                       />

@@ -7,6 +7,8 @@ import {
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function SolutionCatForm() {
   const navigate = useNavigate();
@@ -19,17 +21,17 @@ export default function SolutionCatForm() {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:5000/api/solution-cat/${id}`)
+        .get(`${BASE_URL}/api/solution-cat/${id}`)
         .then((res) => {
           setTitle(res.data.title);
           setPreview(
-            `http://localhost:5000/${res.data.image}`
+            `${BASE_URL}/${res.data.image}`
           );
         });
     }
   }, [id]);
 
-   const handleImageChange = (e) => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
 
     setFormData((prev) => ({
@@ -52,12 +54,12 @@ export default function SolutionCatForm() {
 
     if (id) {
       await axios.put(
-        `http://localhost:5000/api/solution-cat/${id}`,
+        `${BASE_URL}/api/solution-cat/${id}`,
         formData
       );
     } else {
       await axios.post(
-        "http://localhost:5000/api/solution-cat",
+        `${BASE_URL}/api/solution-cat`,
         formData
       );
     }
@@ -77,20 +79,20 @@ export default function SolutionCatForm() {
           />
 
           <Typography>Image</Typography>
-         <input
-              type="file"
-              name="image"
-              onChange={handleImageChange}
-              className="block w-full text-sm"
-            />
+          <input
+            type="file"
+            name="image"
+            onChange={handleImageChange}
+            className="block w-full text-sm"
+          />
 
-            {preview && (
-              <img
-                src={preview}
-                alt="Preview"
-                className="h-24 mt-3 rounded-lg object-cover"
-              />
-            )}
+          {preview && (
+            <img
+              src={preview}
+              alt="Preview"
+              className="h-24 mt-3 rounded-lg object-cover"
+            />
+          )}
 
           <Button type="submit" fullWidth>
             Save

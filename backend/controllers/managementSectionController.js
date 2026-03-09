@@ -2,9 +2,8 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* =============================== */
-/* HELPER: Strip HTML */
-/* =============================== */
+
+
 const stripHtml = (value) => {
   if (!value || typeof value !== "string") return null;
 
@@ -17,9 +16,8 @@ const stripHtml = (value) => {
   return clean.length ? clean : null;
 };
 
-/* =============================== */
-/* HELPER: Delete File */
-/* =============================== */
+
+
 const deleteFile = (filePathFromDb) => {
   if (!filePathFromDb) return;
 
@@ -34,7 +32,7 @@ const deleteFile = (filePathFromDb) => {
   }
 };
 
-/* ================= GET ALL ================= */
+
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.managementsection.findMany({
@@ -48,7 +46,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* ================= GET ONE ================= */
+
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -69,7 +67,8 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* ================= CREATE ================= */
+
+
 exports.create = async (req, res) => {
   try {
     const { heading, paragraph1, paragraph2 } = req.body;
@@ -109,7 +108,8 @@ exports.create = async (req, res) => {
   }
 };
 
-/* ================= UPDATE ================= */
+
+
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -171,7 +171,8 @@ exports.update = async (req, res) => {
   }
 };
 
-/* ================= DELETE ================= */
+
+
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);

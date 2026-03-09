@@ -1,8 +1,6 @@
 const prisma = require("../config/prisma");
 
-/* =============================== */
-/* HELPER: STRIP HTML */
-/* =============================== */
+
 const stripHtml = (value) => {
   if (!value || typeof value !== "string") return value;
   return value
@@ -11,9 +9,7 @@ const stripHtml = (value) => {
     .trim();
 };
 
-/* =============================== */
-/* HELPER: BUILD FULL IMAGE URL */
-/* =============================== */
+
 const buildImagePath = (req, fileArray, existingImage = null) => {
   if (fileArray && fileArray.length > 0) {
     return `uploads/${fileArray[0].filename}`;
@@ -21,9 +17,7 @@ const buildImagePath = (req, fileArray, existingImage = null) => {
   return existingImage;
 };
 
-// ===============================
-// CREATE OFFER
-// ===============================
+
 exports.create = async (req, res) => {
   try {
     const files = req.files || {};
@@ -55,9 +49,7 @@ exports.create = async (req, res) => {
   }
 };
 
-// ===============================
-// GET ALL OFFERS
-// ===============================
+
 exports.getAll = async (req, res) => {
   try {
     const offers = await prisma.offer.findMany({
@@ -71,9 +63,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-// ===============================
-// GET OFFER BY ID
-// ===============================
+
 exports.getById = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -93,9 +83,7 @@ exports.getById = async (req, res) => {
   }
 };
 
-// ===============================
-// UPDATE OFFER
-// ===============================
+
 exports.update = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -157,9 +145,7 @@ exports.update = async (req, res) => {
   }
 };
 
-// ===============================
-// DELETE OFFER
-// ===============================
+
 exports.delete = async (req, res) => {
   try {
     const id = parseInt(req.params.id);

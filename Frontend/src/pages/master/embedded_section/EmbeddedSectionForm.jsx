@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function EmbeddedSectionForm() {
   const navigate = useNavigate();
@@ -21,16 +22,16 @@ export default function EmbeddedSectionForm() {
     image2: null,
     image3: null,
     image4: null,
-    video: null, // ✅ match backend
+    video: null,
   });
 
   const [preview, setPreview] = useState({});
 
-  /* ================= FETCH DATA (EDIT MODE) ================= */
+
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:5000/api/embeddedsection/${id}`)
+        .get(`${BASE_URL}/api/embeddedsection/${id}`)
         .then((res) => {
           const data = res.data;
 
@@ -47,26 +48,26 @@ export default function EmbeddedSectionForm() {
 
           setPreview({
             image1: data.image1
-              ? `http://localhost:5000/${data.image1}`
+              ? `${BASE_URL}/${data.image1}`
               : null,
             image2: data.image2
-              ? `http://localhost:5000/${data.image2}`
+              ? `${BASE_URL}/${data.image2}`
               : null,
             image3: data.image3
-              ? `http://localhost:5000/${data.image3}`
+              ? `${BASE_URL}/${data.image3}`
               : null,
             image4: data.image4
-              ? `http://localhost:5000/${data.image4}`
+              ? `${BASE_URL}/${data.image4}`
               : null,
             video: data.video
-              ? `http://localhost:5000/${data.video}`
+              ? `${BASE_URL}/${data.video}`
               : null,
           });
         });
     }
   }, [id]);
 
-  /* ================= CKEDITOR ================= */
+  // CKEDITOR 
   const handleEditorChange = (field, editor) => {
     setFormData((prev) => ({
       ...prev,
@@ -74,7 +75,8 @@ export default function EmbeddedSectionForm() {
     }));
   };
 
-  /* ================= FILE CHANGE ================= */
+  /* FILE CHANGE  */
+
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     const file = files[0];
@@ -94,7 +96,8 @@ export default function EmbeddedSectionForm() {
     }));
   };
 
-  /* ================= SUBMIT ================= */
+  // SUBMIT
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -108,12 +111,12 @@ export default function EmbeddedSectionForm() {
 
     if (id) {
       await axios.put(
-        `http://localhost:5000/api/embeddedsection/${id}`,
+        `${BASE_URL}/api/embeddedsection/${id}`,
         data
       );
     } else {
       await axios.post(
-        "http://localhost:5000/api/embeddedsection",
+        `${BASE_URL}/api/embeddedsection`,
         data
       );
     }

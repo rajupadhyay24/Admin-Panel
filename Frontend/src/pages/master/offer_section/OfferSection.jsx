@@ -8,13 +8,15 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function OfferSection() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
-    const res = await axios.get("http://localhost:5000/api/offer");
+    const res = await axios.get(`${BASE_URL}/api/offer`);
     setData(res.data);
   };
 
@@ -23,7 +25,7 @@ export default function OfferSection() {
   }, []);
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/api/offer/${id}`);
+    await axios.delete(`${BASE_URL}/api/offer/${id}`);
     fetchData();
   };
 
@@ -56,19 +58,19 @@ export default function OfferSection() {
               <tr>
                 <th className="border border-blue-gray-200 px-3 py-2">Title</th>
 
-                {[1,2,3,4,5].map(num => (
+                {[1, 2, 3, 4, 5].map(num => (
                   <th key={num} className="border border-blue-gray-200 px-3 py-2">
                     Heading {num}
                   </th>
                 ))}
 
-                {[1,2,3,4].map(num => (
+                {[1, 2, 3, 4].map(num => (
                   <th key={num} className="border border-blue-gray-200 px-3 py-2">
                     Paragraph {num}
                   </th>
                 ))}
 
-                {[1,2].map(num => (
+                {[1, 2].map(num => (
                   <th key={num} className="border border-blue-gray-200 px-3 py-2">
                     Image {num}
                   </th>
@@ -81,7 +83,7 @@ export default function OfferSection() {
             <tbody>
               {data.map((item) => (
                 <tr key={item.id} className="hover:bg-blue-gray-50">
-                  
+
                   {/* Title */}
                   <td className="border border-blue-gray-200 px-3 py-2 max-w-xs">
                     <div
@@ -93,7 +95,7 @@ export default function OfferSection() {
                   </td>
 
                   {/* Headings */}
-                  {[1,2,3,4,5].map(num => (
+                  {[1, 2, 3, 4, 5].map(num => (
                     <td key={num} className="border border-blue-gray-200 px-3 py-2 max-w-xs">
                       <div
                         className="line-clamp-1"
@@ -105,7 +107,7 @@ export default function OfferSection() {
                   ))}
 
                   {/* Paragraphs */}
-                  {[1,2,3,4].map(num => (
+                  {[1, 2, 3, 4].map(num => (
                     <td key={num} className="border border-blue-gray-200 px-3 py-2 max-w-xs">
                       <div
                         className="line-clamp-1"
@@ -117,11 +119,11 @@ export default function OfferSection() {
                   ))}
 
                   {/* Images */}
-                  {[1,2].map(num => (
+                  {[1, 2].map(num => (
                     <td key={num} className="border border-blue-gray-200  px-3 py-2 text-center">
                       {item[`image${num}`] && (
                         <img
-                          src={`http://localhost:5000/${item[`image${num}`]}`}
+                          src={`${BASE_URL}/${item[`image${num}`]}`}
                           className="h-12 w-12 object-cover rounded mx-auto"
                           alt=""
                         />

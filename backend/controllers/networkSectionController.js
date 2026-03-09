@@ -2,14 +2,10 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* =======================================
-   CONFIG
-======================================= */
+
 const uploadsDir = path.join(__dirname, "../uploads");
 
-/* =======================================
-   HELPER: Strip HTML
-======================================= */
+
 const stripHtml = (value) => {
   if (!value || typeof value !== "string") return value;
 
@@ -19,9 +15,7 @@ const stripHtml = (value) => {
     .trim();
 };
 
-/* =======================================
-   HELPER: Delete File
-======================================= */
+
 const deleteFile = (filePath) => {
   if (!filePath) return;
 
@@ -32,16 +26,12 @@ const deleteFile = (filePath) => {
   }
 };
 
-/* =======================================
-   HELPER: Build Upload Path
-======================================= */
+
 const buildPath = (filename) => {
   return filename ? `uploads/${filename}` : null;
 };
 
-/* =======================================
-   GET ALL
-======================================= */
+
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.managementsection.findMany({
@@ -55,9 +45,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* =======================================
-   GET ONE
-======================================= */
+
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -81,9 +69,7 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* =======================================
-   CREATE
-======================================= */
+
 exports.create = async (req, res) => {
   try {
     const files = req.files || {};
@@ -111,9 +97,7 @@ exports.create = async (req, res) => {
   }
 };
 
-/* =======================================
-   UPDATE
-======================================= */
+
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -176,9 +160,7 @@ exports.update = async (req, res) => {
   }
 };
 
-/* =======================================
-   DELETE
-======================================= */
+
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);

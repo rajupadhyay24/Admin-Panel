@@ -8,6 +8,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function SolutionCat() {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ export default function SolutionCat() {
 
   const fetchData = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/solution-cat"
+      `${BASE_URL}/api/solution-cat`
     );
     setData(res.data);
   };
@@ -26,7 +28,7 @@ export default function SolutionCat() {
 
   const handleDelete = async (id) => {
     await axios.delete(
-      `http://localhost:5000/api/solution-cat/${id}`
+      `${BASE_URL}/api/solution-cat/${id}`
     );
     fetchData();
   };
@@ -74,7 +76,7 @@ export default function SolutionCat() {
                   <td className="border  border-blue-gray-200 px-3 py-2 text-center">
                     {item.image && (
                       <img
-                        src={`http://localhost:5000/${item.image}`}
+                        src={`${BASE_URL}/${item.image}`}
                         className="h-14 w-14 object-cover rounded mx-auto"
                         alt=""
                       />

@@ -1,12 +1,10 @@
-// controllers/whatSectionController.js
+
 
 const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* ======================= */
-/* HELPER: STRIP HTML */
-/* ======================= */
+
 const stripHtml = (value) => {
   if (!value || typeof value !== "string") return null;
 
@@ -19,9 +17,7 @@ const stripHtml = (value) => {
   return clean.length ? clean : null;
 };
 
-/* ======================= */
-/* HELPER: Delete Image */
-/* ======================= */
+
 const deleteImage = (imagePath) => {
   if (!imagePath) return;
 
@@ -36,9 +32,8 @@ const deleteImage = (imagePath) => {
   }
 };
 
-/* ======================= */
-/* GET ALL */
-/* ======================= */
+
+
 exports.getAll = async (req, res) => {
   try {
     const data = await prisma.what_section.findMany({
@@ -52,9 +47,8 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* GET ONE */
-/* ======================= */
+
+
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -75,9 +69,9 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* CREATE */
-/* ======================= */
+
+
+
 exports.create = async (req, res) => {
   try {
     const cleanTitle = stripHtml(req.body.title);
@@ -109,9 +103,8 @@ exports.create = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* UPDATE */
-/* ======================= */
+
+
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -163,9 +156,8 @@ exports.update = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* DELETE */
-/* ======================= */
+
+
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);

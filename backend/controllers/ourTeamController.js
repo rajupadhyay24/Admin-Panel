@@ -2,22 +2,18 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* ======================= */
-/* BASE DIRECTORY */
-/* ======================= */
+
 const ROOT_DIR = path.join(__dirname, "..");
 
-/* ======================= */
-/* NORMALIZE PATH */
-/* ======================= */
+
+
 const normalizePath = (filePath) => {
   if (!filePath) return null;
-  return filePath.replace(/\\/g, "/"); // Fix Windows paths
+  return filePath.replace(/\\/g, "/");
 };
 
-/* ======================= */
-/* STRIP HTML */
-/* ======================= */
+
+
 const stripHtml = (value) => {
   if (!value || typeof value !== "string") return null;
 
@@ -30,9 +26,8 @@ const stripHtml = (value) => {
   return clean.length ? clean : null;
 };
 
-/* ======================= */
-/* DELETE FILE */
-/* ======================= */
+
+
 const deleteFile = (filePathFromDb) => {
   if (!filePathFromDb) return;
 
@@ -43,7 +38,8 @@ const deleteFile = (filePathFromDb) => {
   }
 };
 
-/* ================= GET ALL ================= */
+
+
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.our_team.findMany({
@@ -57,7 +53,8 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* ================= GET ONE ================= */
+
+
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -76,7 +73,7 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* ================= CREATE ================= */
+
 exports.create = async (req, res) => {
   try {
     const file = req.files?.image?.[0];
@@ -84,7 +81,7 @@ exports.create = async (req, res) => {
     const data = {
       heading: stripHtml(req.body.heading),
       paragraph: stripHtml(req.body.paragraph),
-      image: file ? normalizePath(file.path) : null, // ✅ FIXED
+      image: file ? normalizePath(file.path) : null,
     };
 
     const created = await prisma.our_team.create({ data });
@@ -99,7 +96,8 @@ exports.create = async (req, res) => {
   }
 };
 
-/* ================= UPDATE ================= */
+
+
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -146,7 +144,8 @@ exports.update = async (req, res) => {
   }
 };
 
-/* ================= DELETE ================= */
+
+
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);

@@ -8,6 +8,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function Smarter() {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ export default function Smarter() {
 
   const fetchData = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/smarter"
+      `${BASE_URL}/api/smarter`
     );
     setData(res.data);
   };
@@ -26,7 +28,7 @@ export default function Smarter() {
 
   const handleDelete = async (id) => {
     await axios.delete(
-      `http://localhost:5000/api/smarter/${id}`
+      `${BASE_URL}/api/smarter/${id}`
     );
     fetchData();
   };
@@ -92,13 +94,13 @@ export default function Smarter() {
                   <td className="border-blue-gray-200 border px-3 py-2 text-center">
                     {item.media_type === "image" ? (
                       <img
-                        src={`http://localhost:5000/${item.media}`}
+                        src={`${BASE_URL}/${item.media}`}
                         className="h-14 mx-auto"
                         alt=""
                       />
                     ) : (
                       <video
-                        src={`http://localhost:5000/${item.media}`}
+                        src={`${BASE_URL}/${item.media}`}
                         className="h-14 mx-auto"
                       />
                     )}

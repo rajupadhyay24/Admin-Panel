@@ -26,12 +26,14 @@ const solutionCatRoutes = require("./routes/solutionCatRoutes");
 const solutionSubCatRoutes = require("./routes/solutionSubCatRoutes");
 const solutionImageRoutes = require("./routes/solutionImageRoutes");
 const contactMessagesRoutes = require("./routes/contactMessagesRoutes");
+const systemArchitectureRoutes = require("./routes/systemArchitectureRoutes");
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
+app.use("/api/system-architecture",systemArchitectureRoutes);
 app.use("/api/about", aboutRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/aboutusenterprise", aboutUsEnterpriseRoutes);

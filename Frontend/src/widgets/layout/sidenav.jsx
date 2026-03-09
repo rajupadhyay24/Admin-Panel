@@ -81,6 +81,12 @@ export function Sidenav() {
           </Button>
         </NavLink>
 
+        <NavLink to="/dashboard/solution/system-architecture">
+          <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
+            System Architecture
+          </Button>
+        </NavLink>
+
         </Collapse>
 
       {/* CMS */}

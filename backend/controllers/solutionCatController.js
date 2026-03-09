@@ -24,10 +24,46 @@ exports.createSolutionCat = (req, res) => {
 
 // GET ALL
 exports.getAllSolutionCat = (req, res) => {
-  db.query("SELECT * FROM solution_cat ORDER BY id DESC", (err, results) => {
+  const sql = `
+    SELECT sc.id AS catId, sc.title AS catTitle, sc.image AS catImage,
+           ssc.id AS subId, ssc.para1, ssc.para2, ssc.input1, ssc.input2, ssc.input3, ssc.input4, ssc.image2
+    FROM solution_cat sc
+    LEFT JOIN solution_sub_categories ssc
+    ON sc.id = ssc.solutionCatId
+    ORDER BY sc.id DESC
+  `;
+
+  db.query(sql, (err, results) => {
     if (err) return res.status(500).json(err);
 
-    res.json(results);
+    const categories = [];
+    results.forEach(row => {
+      let cat = categories.find(c => c.id === row.catId);
+      if (!cat) {
+        cat = {
+          id: row.catId,
+          title: row.catTitle,
+          image: row.catImage,
+          subcategories: []
+        };
+        categories.push(cat);
+      }
+
+      if (row.subId) {
+        cat.subcategories.push({
+          id: row.subId,
+          para1: row.para1,
+          para2: row.para2,
+          input1: row.input1,
+          input2: row.input2,
+          input3: row.input3,
+          input4: row.input4,
+          image2: row.image2
+        });
+      }
+    });
+
+    res.json(categories);
   });
 };
 

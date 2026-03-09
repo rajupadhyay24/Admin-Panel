@@ -54,6 +54,11 @@ exports.create = (req, res) => {
     para1: stripHtml(req.body.para1) ?? null,
     para2: stripHtml(req.body.para2) ?? null,
 
+    input1: req.body.input1 ?? null,
+    input2: req.body.input2 ?? null,
+    input3: req.body.input3 ?? null,
+    input4: req.body.input4 ?? null,
+
     image2: buildImagePaths(files),   // ✅ FIXED
   };
 
@@ -141,16 +146,21 @@ exports.update = (req, res) => {
             ? parseInt(req.body.solutionCatId)
             : existing.solutionCatId,
 
-          para1: req.body.para1 !== undefined
+          para1: req.body.para1
             ? stripHtml(req.body.para1)
             : existing.para1,
 
-          para2: req.body.para2 !== undefined
+          para2: req.body.para2
             ? stripHtml(req.body.para2)
             : existing.para2,
 
+          input1: req.body.input1 || existing.input1,
+          input2: req.body.input2 || existing.input2,
+          input3: req.body.input3 || existing.input3,
+          input4: req.body.input4 || existing.input4,
+
           image2,
-        },
+        }
       });
     })
     .then((updated) => {

@@ -16,6 +16,9 @@ import SolutionSubCat from "./pages/solution/solutionsubcat/SolutionSubCat";
 import SolutionSubCatForm from "./pages/solution/solutionsubcat/SolutionSubCatForm";
 import SolutionImage from "./pages/solution/solutionimage/SolutionImage";
 import SolutionImageForm from "./pages/solution/solutionimage/SolutionImageForm";
+import SystemArchitecture from "./pages/solution/systemarchitecture/SystemArchitecture";
+import Components from "./pages/solution/components/Components";
+import ComponentsForm from "./pages/solution/components/ComponentsForm";
 
 //CMS ROUTES
 import AboutUs from "./pages/cms/about_us/AboutUs";
@@ -123,6 +126,19 @@ export const routes = [
       {
         path: "/solution/solution-images/edit/:id",
         element: <SolutionImageForm />,
+      },
+      {
+        name: "system architecture",
+        path: "/solution/system-architecture",
+        element: <SystemArchitecture />,
+      },
+      {
+        path: "/solution/components",
+        element: <Components />,
+      },
+      {
+        path: "/solution/components/add",
+        element: <ComponentsForm />,
       },
       // CMS ROUTES
       //About Us

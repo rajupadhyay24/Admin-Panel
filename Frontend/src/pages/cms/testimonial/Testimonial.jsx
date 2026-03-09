@@ -8,6 +8,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function Testimonial() {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ export default function Testimonial() {
 
   const fetchData = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/testimonials"
+      `${BASE_URL}/api/testimonials`
     );
     setData(res.data);
   };
@@ -26,7 +28,7 @@ export default function Testimonial() {
 
   const handleDelete = async (id) => {
     await axios.delete(
-      `http://localhost:5000/api/testimonials/${id}`
+      `${BASE_URL}/api/testimonials/${id}`
     );
     fetchData();
   };
@@ -58,7 +60,7 @@ export default function Testimonial() {
         <CardBody className="overflow-x-auto">
           <table className="w-full border table-auto text-sm">
 
-            {/* ================= HEADER ================= */}
+           
             <thead className="bg-blue-gray-50">
               <tr>
                 <th className="border-blue-gray-200  border px-3 py-2">Heading</th>
@@ -71,13 +73,13 @@ export default function Testimonial() {
               </tr>
             </thead>
 
-            {/* ================= BODY ================= */}
+         
             <tbody>
               {data.length > 0 ? (
                 data.map((item) => (
                   <tr key={item.id}>
 
-                    {/* Heading */}
+               
                     <td
                       className="border-blue-gray-200  border px-3 py-2"
                       dangerouslySetInnerHTML={{
@@ -85,7 +87,7 @@ export default function Testimonial() {
                       }}
                     />
 
-                    {/* Para1 */}
+                   
                     <td
                       className="border-blue-gray-200  border px-3 py-2"
                       dangerouslySetInnerHTML={{
@@ -93,7 +95,7 @@ export default function Testimonial() {
                       }}
                     />
 
-                    {/* Para2 */}
+                
                     <td
                       className="border-blue-gray-200  border px-3 py-2"
                       dangerouslySetInnerHTML={{
@@ -101,40 +103,40 @@ export default function Testimonial() {
                       }}
                     />
 
-                    {/* Image 1 */}
+                  
                     <td className="border-blue-gray-200  border px-3 py-2 text-center">
                       {item.image1 && (
                         <img
-                          src={`http://localhost:5000/${item.image1}`}
+                          src={`${BASE_URL}/${item.image1}`}
                           className="h-14 w-14 object-cover mx-auto rounded"
                           alt=""
                         />
                       )}
                     </td>
 
-                    {/* Image 2 */}
+                
                     <td className="border-blue-gray-200  border px-3 py-2 text-center">
                       {item.image2 && (
                         <img
-                          src={`http://localhost:5000/${item.image2}`}
+                          src={`${BASE_URL}/${item.image2}`}
                           className="h-14 w-14 object-cover mx-auto rounded"
                           alt=""
                         />
                       )}
                     </td>
 
-                    {/* Image 3 */}
+                    
                     <td className="border-blue-gray-200  border px-3 py-2 text-center">
                       {item.image3 && (
                         <img
-                          src={`http://localhost:5000/${item.image3}`}
+                          src={`${BASE_URL}/${item.image3}`}
                           className="h-14 w-14 object-cover mx-auto rounded"
                           alt=""
                         />
                       )}
                     </td>
 
-                    {/* Action */}
+                 
                     <td className="border-blue-gray-200  border px-3 py-2">
                       <div className="flex gap-2">
 

@@ -8,6 +8,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function SolutionImage() {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ export default function SolutionImage() {
 
   const fetchData = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/solution-images"
+      `${BASE_URL}/api/solution-images`
     );
     setData(res.data);
   };
@@ -26,7 +28,7 @@ export default function SolutionImage() {
 
   const handleDelete = async (id) => {
     await axios.delete(
-      `http://localhost:5000/api/solution-images/${id}`
+      `${BASE_URL}/api/solution-images/${id}`
     );
     fetchData();
   };
@@ -78,7 +80,7 @@ export default function SolutionImage() {
                         .map((img, i) => (
                           <img
                             key={i}
-                            src={`http://localhost:5000/${img}`}
+                            src={`${BASE_URL}/${img}`}
                             className="h-14 w-14 object-cover rounded"
                             alt=""
                           />

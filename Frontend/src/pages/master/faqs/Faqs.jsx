@@ -2,13 +2,15 @@ import { Card, CardHeader, CardBody, Typography, Button } from "@material-tailwi
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function Faqs() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
-    const res = await axios.get("http://localhost:5000/api/faqs");
+    const res = await axios.get(`${BASE_URL}/api/faqs`);
     setData(res.data);
   };
 
@@ -17,7 +19,7 @@ export default function Faqs() {
   }, []);
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/api/faqs/${id}`);
+    await axios.delete(`${BASE_URL}/api/faqs/${id}`);
     fetchData();
   };
 

@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function EverywhereSlide() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function EverywhereSlide() {
 
   const fetchData = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/everywhere-slide"
+      `${BASE_URL}/api/everywhere-slide`
     );
     setData(res.data);
   };
@@ -26,7 +27,7 @@ export default function EverywhereSlide() {
 
   const handleDelete = async (id) => {
     await axios.delete(
-      `http://localhost:5000/api/everywhere-slide/${id}`
+      `${BASE_URL}/api/everywhere-slide/${id}`
     );
     fetchData();
   };
@@ -71,7 +72,7 @@ export default function EverywhereSlide() {
                   <td className="border px-3 py-2 text-center">
                     {item.image && (
                       <img
-                        src={`http://localhost:5000/${item.image}`}
+                        src={`${BASE_URL}/${item.image}`}
                         className="h-14 w-14 object-cover rounded mx-auto"
                         alt=""
                       />

@@ -1,23 +1,19 @@
 const prisma = require("../config/prisma");
 
-/* ============================= */
-/* HELPER: STRIP HTML TAGS */
-/* ============================= */
+
 const stripHtml = (value) => {
   if (!value || typeof value !== "string") return null;
 
   const clean = value
-    .replace(/<[^>]*>/g, "")   // Remove HTML tags
-    .replace(/&nbsp;/g, " ")   // Replace &nbsp;
-    .replace(/\s+/g, " ")      // Remove extra spaces
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
 
   return clean.length ? clean : null;
 };
 
-/* ===============================
-   Get All (WITH JOIN)
-================================ */
+
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.cms_faqs.findMany({
@@ -39,9 +35,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* ===============================
-   Get One
-================================ */
+
 exports.getOne = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -61,12 +55,13 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* ===============================
-   Create
-================================ */
+
 exports.create = async (req, res) => {
   try {
+    console.log("the request data in the body is the ", req.body);
+    // const { faq_id, para } = req.body.faq;
     const { faq_id } = req.body;
+    // const cleanPara = stripHtml(para);
     const cleanPara = stripHtml(req.body.para);
 
     if (!faq_id || !cleanPara) {
@@ -82,6 +77,7 @@ exports.create = async (req, res) => {
       },
     });
 
+
     res.json({ message: "Created successfully" });
   } catch (err) {
     console.error(err);
@@ -89,9 +85,7 @@ exports.create = async (req, res) => {
   }
 };
 
-/* ===============================
-   Update
-================================ */
+
 exports.update = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -113,9 +107,7 @@ exports.update = async (req, res) => {
   }
 };
 
-/* ===============================
-   Delete
-================================ */
+
 exports.remove = async (req, res) => {
   try {
     const id = parseInt(req.params.id);

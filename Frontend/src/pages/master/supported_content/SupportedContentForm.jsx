@@ -8,6 +8,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function SupportedContentForm() {
   const navigate = useNavigate();
@@ -29,7 +31,7 @@ export default function SupportedContentForm() {
     if (id) {
       axios
         .get(
-          `http://localhost:5000/api/supported-content/${id}`
+          `${BASE_URL}/api/supported-content/${id}`
         )
         .then((res) => {
           setFormData(res.data);
@@ -39,7 +41,7 @@ export default function SupportedContentForm() {
             if (res.data[`image${num}`]) {
               images[
                 `image${num}`
-              ] = `http://localhost:5000/ /${res.data[`image${num}`]}`;
+              ] = `${BASE_URL}/${res.data[`image${num}`]}`;
             }
           });
           setPreview(images);
@@ -79,12 +81,12 @@ export default function SupportedContentForm() {
 
     if (id) {
       await axios.put(
-        `http://localhost:5000/api/supported-content/${id}`,
+        `${BASE_URL}/api/supported-content/${id}`,
         data
       );
     } else {
       await axios.post(
-        "http://localhost:5000/api/supported-content",
+        `${BASE_URL}/api/supported-content`,
         data
       );
     }

@@ -8,6 +8,8 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function TestimonialForm() {
   const navigate = useNavigate();
@@ -27,16 +29,16 @@ export default function TestimonialForm() {
 
   const [loading, setLoading] = useState(true);
 
-  // ================= FETCH DATA =================
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (id) {
           const res = await axios.get(
-            `http://localhost:5000/api/testimonials/${id}`
+            `${BASE_URL}/api/testimonials/${id}`
           );
 
-          // 🔥 IMPORTANT: Only set required fields
+
           setForm({
             heading: res.data?.heading || "",
             para1: res.data?.para1 || "",
@@ -64,7 +66,7 @@ export default function TestimonialForm() {
     return <div className="p-10">Loading...</div>;
   }
 
-  // ================= SUBMIT =================
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -82,12 +84,12 @@ export default function TestimonialForm() {
     try {
       if (id) {
         await axios.put(
-          `http://localhost:5000/api/testimonials/${id}`,
+          `${BASE_URL}/api/testimonials/${id}`,
           formData
         );
       } else {
         await axios.post(
-          "http://localhost:5000/api/testimonials",
+          `${BASE_URL}/api/testimonials`,
           formData
         );
       }
@@ -153,7 +155,7 @@ export default function TestimonialForm() {
 
               {preview[`image${num}`] && (
                 <img
-                  src={`http://localhost:5000/${preview[`image${num}`]}`}
+                  src={`${BASE_URL}/${preview[`image${num}`]}`}
                   className="h-20 mt-3"
                   alt=""
                 />

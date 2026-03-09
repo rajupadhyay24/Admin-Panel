@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function OurTeam() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function OurTeam() {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/our-team");
+      const res = await axios.get(`${BASE_URL}/api/our-team`);
       setData(res.data);
     } catch (error) {
       console.error("Fetch error:", error);
@@ -28,7 +29,7 @@ export default function OurTeam() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/our-team/${id}`);
+      await axios.delete(`${BASE_URL}/api/our-team/${id}`);
       fetchData();
     } catch (error) {
       console.error("Delete error:", error);
@@ -106,7 +107,7 @@ export default function OurTeam() {
                     <td className="border-blue-gray-200  border px-4 py-3 text-center">
                       {item.image ? (
                         <img
-                          src={`http://localhost:5000/${item.image}`}
+                          src={`${BASE_URL}/${item.image}`}
                           alt="team"
                           className="h-14 w-14 object-cover rounded-lg mx-auto"
                         />

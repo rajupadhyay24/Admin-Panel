@@ -7,8 +7,8 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
-const BASE_URL = "http://localhost:5000";
 
 export default function AddSlidesContent() {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ export default function AddSlidesContent() {
   const [oldMedia, setOldMedia] = useState("");
   const [preview, setPreview] = useState("");
 
-  /* ================= FETCH SINGLE ================= */
+
   useEffect(() => {
     if (id) {
       axios.get(`${BASE_URL}/api/slides/${id}`)
@@ -31,7 +31,7 @@ export default function AddSlidesContent() {
     }
   }, [id]);
 
-  /* ================= HANDLE FILE CHANGE ================= */
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setMedia(file);
@@ -41,7 +41,7 @@ export default function AddSlidesContent() {
     }
   };
 
-  /* ================= SUBMIT ================= */
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 

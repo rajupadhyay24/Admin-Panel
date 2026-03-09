@@ -8,6 +8,8 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import BASE_URL from "../../../configs/api";
+
 
 export default function SolutionSubCatForm() {
   const navigate = useNavigate();
@@ -17,42 +19,50 @@ export default function SolutionSubCatForm() {
   const [loading, setLoading] = useState(!!id);
 
   const [formData, setFormData] = useState({
-    solutionCatId: "",
-    title: "",
-    image: "",
-    para1: "",
-    para2: "",
-    image2: [],
-  });
+  solutionCatId: "",
+  title: "",
+  image: "",
+  para1: "",
+  para2: "",
+  para3: "",
+  para4: "",
+  para5: "",
+  para6: "",
+  image2: []
+});
 
   const [previewImages, setPreviewImages] = useState([]);
 
-  // 🔹 Fetch categories
+
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/solution-cat")
+      .get(`${BASE_URL}/api/solution-cat`)
       .then((res) => setCategories(res.data))
       .catch((err) => console.log(err));
   }, []);
 
-  // 🔹 Fetch sub category if editing
+
   useEffect(() => {
     if (id) {
       setLoading(true);
 
       axios
-        .get(`http://localhost:5000/api/solution-sub-cat/${id}`)
+        .get(`${BASE_URL}/api/solution-sub-cat/${id}`)
         .then((res) => {
           const data = res.data;
 
-          setFormData({
-            solutionCatId: data.solutionCatId || "",
-            title: data.title || "",
-            image: data.image || "",
-            para1: data.para1 || "",
-            para2: data.para2 || "",
-            image2: [],
-          });
+         setFormData({
+          solutionCatId: data.solutionCatId || "",
+          title: data.title || "",
+          image: data.image || "",
+          para1: data.para1 || "",
+          para2: data.para2 || "",
+          para3: data.para3 || "",
+          para4: data.para4 || "",
+          para5: data.para5 || "",
+          para6: data.para6 || "",
+          image2: [],
+        });
 
           const existingImages =
             typeof data.image2 === "string"
@@ -62,7 +72,7 @@ export default function SolutionSubCatForm() {
           setPreviewImages(
             existingImages.map(
               (img) =>
-                `http://localhost:5000/${img}`
+                `${BASE_URL}/${img}`
             )
           );
 
@@ -77,7 +87,7 @@ export default function SolutionSubCatForm() {
     }
   }, [id]);
 
-  // 🔹 Handle multiple image upload
+
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
 
@@ -93,7 +103,7 @@ export default function SolutionSubCatForm() {
     setPreviewImages(previews);
   };
 
-  // 🔹 Handle submit
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -106,6 +116,10 @@ export default function SolutionSubCatForm() {
     data.append("solutionCatId", formData.solutionCatId);
     data.append("para1", formData.para1);
     data.append("para2", formData.para2);
+    data.append("para3", formData.para3);
+    data.append("para4", formData.para4);
+    data.append("para5", formData.para5);
+    data.append("para6", formData.para6);
 
     formData.image2.forEach((file) => {
       data.append("image2", file);
@@ -114,12 +128,12 @@ export default function SolutionSubCatForm() {
     try {
       if (id) {
         await axios.put(
-          `http://localhost:5000/api/solution-sub-cat/${id}`,
+          `${BASE_URL}/api/solution-sub-cat/${id}`,
           data
         );
       } else {
         await axios.post(
-          "http://localhost:5000/api/solution-sub-cat",
+          `${BASE_URL}/api/solution-sub-cat`,
           data
         );
       }
@@ -130,7 +144,7 @@ export default function SolutionSubCatForm() {
     }
   };
 
-  // 🔥 Prevent CKEditor from rendering before data loads
+
   if (loading) {
     return <div className="p-10">Loading...</div>;
   }
@@ -140,7 +154,7 @@ export default function SolutionSubCatForm() {
       <Card className="w-full p-10">
         <form onSubmit={handleSubmit} className="space-y-6">
 
-          {/* Category Dropdown */}
+
           <Typography>Select Category</Typography>
           <select
             className="border p-2 w-full"
@@ -161,7 +175,7 @@ export default function SolutionSubCatForm() {
             ))}
           </select>
 
-          {/* Category Title */}
+
           {formData.title && (
             <>
               <Typography>Category Title</Typography>
@@ -173,19 +187,19 @@ export default function SolutionSubCatForm() {
             </>
           )}
 
-          {/* Category Image */}
+
           {formData.image && (
             <>
               <Typography>Category Image</Typography>
               <img
-                src={`http://localhost:5000/${formData.image}`}
+                src={`${BASE_URL}/${formData.image}`}
                 className="h-24 rounded"
                 alt="category"
               />
             </>
           )}
 
-          {/* Full Details */}
+
           <Typography>Full Details</Typography>
           <CKEditor
             key={`para1-${id || "new"}`}
@@ -199,7 +213,7 @@ export default function SolutionSubCatForm() {
             }
           />
 
-          {/* Description */}
+
           <Typography>Description</Typography>
           <CKEditor
             key={`para2-${id || "new"}`}
@@ -213,7 +227,56 @@ export default function SolutionSubCatForm() {
             }
           />
 
-          {/* Multiple Images */}
+          <Typography>Paragraph 3</Typography>
+          <CKEditor
+          editor={ClassicEditor}
+          data={formData.para3}
+          onChange={(event, editor) =>
+            setFormData(prev => ({
+            ...prev,
+            para3: editor.getData()
+            }))
+          }
+          />
+
+
+        <Typography>Paragraph 4</Typography>
+        <CKEditor
+        editor={ClassicEditor}
+        data={formData.para4}
+        onChange={(event, editor) =>
+          setFormData(prev => ({
+          ...prev,
+          para4: editor.getData()
+          }))
+        }
+        />
+
+        <Typography>Paragraph 5</Typography>
+        <CKEditor
+        editor={ClassicEditor}
+        data={formData.para5}
+        onChange={(event, editor) =>
+          setFormData(prev => ({
+          ...prev,
+          para5: editor.getData()
+          }))
+        }
+        />
+
+        <Typography>Paragraph 6</Typography>
+        <CKEditor
+        editor={ClassicEditor}
+        data={formData.para6}
+        onChange={(event, editor) =>
+          setFormData(prev => ({
+          ...prev,
+          para6: editor.getData()
+          }))
+        }
+        />
+
+
           <Typography>Upload Multiple Images</Typography>
           <input
             type="file"

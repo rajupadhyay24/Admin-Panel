@@ -25,6 +25,8 @@ const cmsFaqRoutes = require("./routes/cmsFaqRoutes");
 const solutionCatRoutes = require("./routes/solutionCatRoutes");
 const solutionSubCatRoutes = require("./routes/solutionSubCatRoutes");
 const solutionImageRoutes = require("./routes/solutionImageRoutes");
+const enquiryRoutes = require("./routes/enquiryRoutes");
+
 
 const app = express();
 
@@ -55,8 +57,7 @@ app.use("/api/ai-powered" , aiPoweredRoutes);
 app.use("/api/faqs" , faqsRoutes);
 app.use("/api/cms-faqs" , cmsFaqRoutes);
 app.use("/api/solution-images" , solutionImageRoutes);
-// app.use("/api/faqs" , faqsRoutes);
-// app.use("/api/faqs" , faqsRoutes);
+app.use("/api/enquiry", enquiryRoutes);
 
 
 app.listen(process.env.PORT, () => {

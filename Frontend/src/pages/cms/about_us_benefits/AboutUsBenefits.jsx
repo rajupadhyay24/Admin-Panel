@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function AboutUsBenefits() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function AboutUsBenefits() {
   const fetchData = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/aboutusbenefits"
+        `${BASE_URL}/api/aboutusbenefits`
       );
 
       // If backend returns { success: true, data }
@@ -39,7 +40,7 @@ export default function AboutUsBenefits() {
   const handleDelete = async (id) => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/aboutusbenefits/${id}`
+        `${BASE_URL}/api/aboutusbenefits/${id}`
       );
       fetchData();
     } catch (error) {
@@ -75,7 +76,7 @@ export default function AboutUsBenefits() {
             <thead className="bg-blue-gray-50">
               <tr>
                 {/* 8 Headings */}
-                {[1,2,3,4,5,6,7,8].map((i) => (
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                   <th
                     key={`heading${i}`}
                     className="border border-blue-gray-200  px-3 py-2 text-xs font-bold uppercase"
@@ -85,7 +86,7 @@ export default function AboutUsBenefits() {
                 ))}
 
                 {/* 4 Paragraphs */}
-                {[1,2,3,4].map((i) => (
+                {[1, 2, 3, 4].map((i) => (
                   <th
                     key={`paragraph${i}`}
                     className="border border-blue-gray-200  px-3 py-2 text-xs font-bold uppercase"
@@ -115,7 +116,7 @@ export default function AboutUsBenefits() {
                   className="hover:bg-blue-gray-50"
                 >
                   {/* 8 Headings */}
-                  {[1,2,3,4,5,6,7,8].map((i) => (
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                     <td
                       key={`heading${i}`}
                       className="border border-blue-gray-200 px-3 py-2 max-w-xs"
@@ -130,7 +131,7 @@ export default function AboutUsBenefits() {
                   ))}
 
                   {/* 4 Paragraphs */}
-                  {[1,2,3,4].map((i) => (
+                  {[1, 2, 3, 4].map((i) => (
                     <td
                       key={`paragraph${i}`}
                       className="border border-blue-gray-200  px-3 py-2 max-w-sm"
@@ -148,7 +149,7 @@ export default function AboutUsBenefits() {
                   <td className="border border-blue-gray-200  px-3 py-2 text-center">
                     {item.image1 && (
                       <img
-                        src={`http://localhost:5000/${item.image1}`}
+                        src={`${BASE_URL}/${item.image1}`}
                         className="h-14 w-14 object-cover rounded-lg mx-auto"
                         alt=""
                       />
@@ -159,7 +160,7 @@ export default function AboutUsBenefits() {
                   <td className="border border-blue-gray-200  px-3 py-2 text-center">
                     {item.image2 && (
                       <img
-                        src={`http://localhost:5000/${item.image2}`}
+                        src={`${BASE_URL}/${item.image2}`}
                         className="h-14 w-14 object-cover rounded-lg mx-auto"
                         alt=""
                       />
@@ -173,7 +174,7 @@ export default function AboutUsBenefits() {
                         size="sm"
                         variant="outlined"
                         onClick={() =>
-                         navigate(`/dashboard/cms/about-us-benefits/edit/${item.id}`)
+                          navigate(`/dashboard/cms/about-us-benefits/edit/${item.id}`)
 
                         }
                       >

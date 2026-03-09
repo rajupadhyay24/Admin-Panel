@@ -47,7 +47,7 @@ export default function AddSlidesContent() {
     e.preventDefault();
     console.log(formData);
 
-    // After save → go back to list page
+
     navigate("../master/slides-content", { replace: true });
   };
 
@@ -82,7 +82,7 @@ export default function AddSlidesContent() {
             </div>
           </div>
 
-          {/* Media Upload */}
+
           <div className="col-span-12">
             <Typography variant="small" className="mb-2 font-medium">
               Upload Image or Video

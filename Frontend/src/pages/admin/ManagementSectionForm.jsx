@@ -57,7 +57,7 @@ export default function ManagementSectionForm() {
     e.preventDefault();
     console.log(formData);
 
-    // Go back to list page
+
     navigate("/dashboard/master/management-section");
   };
 
@@ -91,7 +91,7 @@ export default function ManagementSectionForm() {
             </div>
           </div>
 
-          {/* Content */}
+
           <div className="col-span-12">
             <Typography className="mb-2 font-medium">
               Content
@@ -107,7 +107,8 @@ export default function ManagementSectionForm() {
             </div>
           </div>
 
-          {/* Images */}
+
+
           {[1, 2, 3, 4].map((num) => (
             <div key={num} className="col-span-12 md:col-span-6">
               <Typography className="mb-2 font-medium">

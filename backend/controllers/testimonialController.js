@@ -4,9 +4,7 @@ const path = require("path");
 
 const ROOT_DIR = path.join(__dirname, "../");
 
-/* ======================= */
-/* HELPERS */
-/* ======================= */
+
 
 const stripHtml = (value) => {
   if (!value || typeof value !== "string") return null;
@@ -29,6 +27,8 @@ const deleteFile = async (filePathFromDb) => {
   }
 };
 
+
+
 const extractImages = (files) => {
   const result = {};
 
@@ -41,7 +41,8 @@ const extractImages = (files) => {
   return result;
 };
 
-/* ================= CREATE ================= */
+
+
 exports.createTestimonial = async (req, res) => {
   const files = req.files || {};
   const images = extractImages(files);
@@ -74,7 +75,9 @@ exports.createTestimonial = async (req, res) => {
   }
 };
 
-/* ================= GET ALL ================= */
+
+
+
 exports.getAllTestimonials = async (req, res) => {
   try {
     const records = await prisma.testimonials.findMany({
@@ -88,7 +91,8 @@ exports.getAllTestimonials = async (req, res) => {
   }
 };
 
-/* ================= GET SINGLE ================= */
+
+
 exports.getSingleTestimonial = async (req, res) => {
   const id = Number(req.params.id);
 
@@ -112,7 +116,8 @@ exports.getSingleTestimonial = async (req, res) => {
   }
 };
 
-/* ================= UPDATE ================= */
+
+
 exports.updateTestimonial = async (req, res) => {
   const id = Number(req.params.id);
 
@@ -169,7 +174,8 @@ exports.updateTestimonial = async (req, res) => {
   }
 };
 
-/* ================= DELETE ================= */
+
+
 exports.deleteTestimonial = async (req, res) => {
   const id = Number(req.params.id);
 

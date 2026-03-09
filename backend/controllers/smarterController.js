@@ -2,9 +2,9 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-const ROOT_DIR = path.join(__dirname, "../"); // ✅ fixed (no space)
+const ROOT_DIR = path.join(__dirname, "../");
 
-/* ================= STRIP HTML ================= */
+
 const stripHtml = (value) => {
   if (!value || typeof value !== "string") return null;
 
@@ -17,7 +17,7 @@ const stripHtml = (value) => {
   return clean.length ? clean : null;
 };
 
-/* ================= DELETE FILE ================= */
+
 const deleteFile = (filePathFromDb) => {
   if (!filePathFromDb) return;
 
@@ -32,7 +32,8 @@ const deleteFile = (filePathFromDb) => {
   }
 };
 
-/* ================= GET ALL ================= */
+
+
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.smarter_section.findMany({
@@ -46,7 +47,8 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* ================= GET ONE ================= */
+
+
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -65,7 +67,8 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* ================= CREATE ================= */
+
+
 exports.create = async (req, res) => {
   try {
     const cleanHeading = stripHtml(req.body.heading);
@@ -81,7 +84,7 @@ exports.create = async (req, res) => {
     let media_type = null;
 
     if (req.file) {
-      // ✅ save full relative path properly
+
       media = `uploads/${req.file.filename}`;
       media_type = req.file.mimetype.startsWith("video")
         ? "video"

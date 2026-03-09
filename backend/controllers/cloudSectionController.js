@@ -2,14 +2,11 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* =======================================
-   CONFIG
-======================================= */
+
+
 const uploadsDir = path.join(__dirname, "../uploads");
 
-/* =======================================
-   HELPER: Strip HTML
-======================================= */
+
 const stripHtml = (value) => {
   if (!value || typeof value !== "string") return value;
 
@@ -19,9 +16,8 @@ const stripHtml = (value) => {
     .trim();
 };
 
-/* =======================================
-   HELPER: Delete File
-======================================= */
+
+
 const deleteFile = (filePath) => {
   if (!filePath) return;
 
@@ -32,16 +28,13 @@ const deleteFile = (filePath) => {
   }
 };
 
-/* =======================================
-   HELPER: Build Upload Path
-======================================= */
+
 const buildPath = (filename) => {
   return filename ? `uploads/${filename}` : null;
 };
 
-/* =======================================
-   GET ALL
-======================================= */
+
+
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.cloudsection.findMany({
@@ -55,9 +48,8 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* =======================================
-   GET ONE
-======================================= */
+
+
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -81,9 +73,8 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* =======================================
-   CREATE
-======================================= */
+
+
 exports.create = async (req, res) => {
   try {
     const files = req.files || {};
@@ -111,9 +102,9 @@ exports.create = async (req, res) => {
   }
 };
 
-/* =======================================
-   UPDATE
-======================================= */
+
+
+
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -155,7 +146,7 @@ exports.update = async (req, res) => {
     ["image1", "image2", "image3", "image4"].forEach((field) => {
       if (files[field]?.[0]?.filename) {
         if (existing[field]) {
-          deleteFile(existing[field]); // delete old image
+          deleteFile(existing[field]);
         }
 
         data[field] = buildPath(files[field][0].filename);
@@ -177,9 +168,8 @@ exports.update = async (req, res) => {
   }
 };
 
-/* =======================================
-   DELETE
-======================================= */
+
+
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);

@@ -8,6 +8,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function NetworkSectionForm() {
   const navigate = useNavigate();
@@ -25,15 +27,15 @@ export default function NetworkSectionForm() {
 
   const [preview, setPreview] = useState({});
 
-  // ================= FETCH DATA FOR EDIT =================
+
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:5000/api/networksection/${id}`)
+        .get(`${BASE_URL}/api/networksection/${id}`)
         .then((res) => {
           const data = res.data;
 
-          // formData me purani images ka filename store kar rahe
+
           setFormData({
             heading: data.heading || "",
             paragraph1: data.paragraph1 || "",
@@ -44,19 +46,19 @@ export default function NetworkSectionForm() {
             image4: data.image4 || null,
           });
 
-          // preview me URL for frontend
+
           setPreview({
-            image1: data.image1 ? `http://localhost:5000/${data.image1}` : null,
-            image2: data.image2 ? `http://localhost:5000/${data.image2}` : null,
-            image3: data.image3 ? `http://localhost:5000/${data.image3}` : null,
-            image4: data.image4 ? `http://localhost:5000/${data.image4}` : null,
+            image1: data.image1 ? `${BASE_URL}/${data.image1}` : null,
+            image2: data.image2 ? `${BASE_URL}/${data.image2}` : null,
+            image3: data.image3 ? `${BASE_URL}/${data.image3}` : null,
+            image4: data.image4 ? `${BASE_URL}/${data.image4}` : null,
           });
         })
         .catch((err) => console.error(err));
     }
   }, [id]);
 
-  // ================= CKEditor CHANGE =================
+
   const handleEditorChange = (field, editor) => {
     setFormData((prev) => ({
       ...prev,
@@ -64,12 +66,12 @@ export default function NetworkSectionForm() {
     }));
   };
 
-  // ================= FILE CHANGE =================
+
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     if (!files[0]) return;
 
-    // formData me File object store karo
+
     setFormData((prev) => ({
       ...prev,
       [name]: files[0],
@@ -88,34 +90,34 @@ export default function NetworkSectionForm() {
 
     const data = new FormData();
 
-    // Text fields
+
     ["heading", "paragraph1", "paragraph2"].forEach((key) => {
       if (formData[key]) data.append(key, formData[key]);
     });
 
-    // Images
+
     ["image1", "image2", "image3", "image4"].forEach((key) => {
       if (formData[key] instanceof File) {
-        // Nayi file
+
         data.append(key, formData[key]);
       } else if (formData[key]) {
-        // Purani image filename
+
         data.append(key, formData[key]);
       }
     });
 
     try {
       if (id) {
-        // UPDATE
+
         await axios.put(
-          `http://localhost:5000/api/networksection/${id}`,
+          `${BASE_URL}/api/networksection/${id}`,
           data,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
       } else {
-        // CREATE
+
         await axios.post(
-          "http://localhost:5000/api/networksection",
+          `${BASE_URL}/api/networksection`,
           data,
           { headers: { "Content-Type": "multipart/form-data" } }
         );

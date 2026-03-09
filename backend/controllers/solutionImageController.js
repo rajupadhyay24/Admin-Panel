@@ -1,25 +1,23 @@
-// controllers/solutionImageController.js
+
 
 const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* ======================= */
-/* ROOT DIRECTORY */
-/* ======================= */
+
+
 const ROOT_DIR = path.join(__dirname, "..");
 
-/* ======================= */
-/* NORMALIZE PATH */
-/* ======================= */
+
+
+
 const normalizePath = (filePath) => {
   if (!filePath) return null;
-  return filePath.replace(/\\/g, "/"); // Windows fix
+  return filePath.replace(/\\/g, "/");
 };
 
-/* ======================= */
-/* DELETE FILE */
-/* ======================= */
+
+
 const deleteFile = (filePathFromDb) => {
   if (!filePathFromDb) return;
 
@@ -34,7 +32,8 @@ const deleteFile = (filePathFromDb) => {
   }
 };
 
-/* ================= CREATE ================= */
+
+
 exports.createSolutionImage = async (req, res) => {
   try {
     const { title } = req.body;
@@ -72,7 +71,8 @@ exports.createSolutionImage = async (req, res) => {
   }
 };
 
-/* ================= GET ALL ================= */
+
+
 exports.getAllSolutionImages = async (req, res) => {
   try {
     const records = await prisma.solution_images.findMany({
@@ -85,7 +85,8 @@ exports.getAllSolutionImages = async (req, res) => {
   }
 };
 
-/* ================= GET SINGLE ================= */
+
+
 exports.getSingleSolutionImage = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -105,7 +106,8 @@ exports.getSingleSolutionImage = async (req, res) => {
   }
 };
 
-/* ================= UPDATE ================= */
+
+
 exports.updateSolutionImage = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -165,7 +167,8 @@ exports.updateSolutionImage = async (req, res) => {
   }
 };
 
-/* ================= DELETE ================= */
+
+
 exports.deleteSolutionImage = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -179,7 +182,7 @@ exports.deleteSolutionImage = async (req, res) => {
       return res.status(404).json({ message: "Record not found" });
     }
 
-    // Delete all images from disk
+
     [existing.image1, existing.image2, existing.image3, existing.image4]
       .filter(Boolean)
       .forEach((imgPath) => deleteFile(imgPath));

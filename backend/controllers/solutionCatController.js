@@ -1,6 +1,8 @@
 const db = require("../config/db");
 
-// CREATE
+
+
+
 exports.createSolutionCat = (req, res) => {
   const { title } = req.body;
   const image = req.file ? req.file.filename : null;
@@ -22,7 +24,7 @@ exports.createSolutionCat = (req, res) => {
   });
 };
 
-// GET ALL
+
 exports.getAllSolutionCat = (req, res) => {
   db.query("SELECT * FROM solution_cat ORDER BY id DESC", (err, results) => {
     if (err) return res.status(500).json(err);
@@ -31,7 +33,8 @@ exports.getAllSolutionCat = (req, res) => {
   });
 };
 
-// GET SINGLE
+
+
 exports.getSingleSolutionCat = (req, res) => {
   const { id } = req.params;
 
@@ -45,7 +48,9 @@ exports.getSingleSolutionCat = (req, res) => {
   );
 };
 
-// UPDATE
+
+
+
 exports.updateSolutionCat = (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
@@ -70,7 +75,8 @@ exports.updateSolutionCat = (req, res) => {
   });
 };
 
-// DELETE
+
+
 exports.deleteSolutionCat = (req, res) => {
   const { id } = req.params;
 

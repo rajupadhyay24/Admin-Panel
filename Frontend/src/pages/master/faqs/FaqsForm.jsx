@@ -2,6 +2,7 @@ import { Card, Typography, Button } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function FaqsForm() {
   const navigate = useNavigate();
@@ -11,16 +12,16 @@ export default function FaqsForm() {
 
   useEffect(() => {
     if (id) {
-      axios.get(`http://localhost:5000/api/faqs/${id}`).then((res) => setTitle(res.data.title));
+      axios.get(`${BASE_URL}/api/faqs/${id}`).then((res) => setTitle(res.data.title));
     }
   }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (id) {
-      await axios.put(`http://localhost:5000/api/faqs/${id}`, { title });
+      await axios.put(`${BASE_URL}/api/faqs/${id}`, { title });
     } else {
-      await axios.post(`http://localhost:5000/api/faqs`, { title });
+      await axios.post(`${BASE_URL}/api/faqs`, { title });
     }
     navigate("/dashboard/master/faqs");
   };
@@ -30,7 +31,7 @@ export default function FaqsForm() {
       <Card className="w-full p-10">
         <form onSubmit={handleSubmit} className="space-y-6">
           <Typography>Title</Typography>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full border px-3 py-2 rounded"/>
+          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full border px-3 py-2 rounded" />
           <Button type="submit" fullWidth>Save</Button>
         </form>
       </Card>

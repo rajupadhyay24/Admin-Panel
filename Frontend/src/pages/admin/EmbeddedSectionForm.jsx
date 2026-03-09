@@ -57,7 +57,7 @@ export default function EmbeddedSectionForm() {
     e.preventDefault();
     console.log(formData);
 
-    // Go back to list page
+
     navigate("/dashboard/master/embedded-section");
   };
 
@@ -107,7 +107,7 @@ export default function EmbeddedSectionForm() {
             </div>
           </div>
 
-          {/* Images */}
+
           {[1, 2, 3, 4].map((num) => (
             <div key={num} className="col-span-12 md:col-span-6">
               <Typography className="mb-2 font-medium">

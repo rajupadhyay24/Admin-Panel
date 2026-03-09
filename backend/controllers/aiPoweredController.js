@@ -2,11 +2,9 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-const ROOT_DIR = path.join(__dirname, "../"); // ✅ correct path
+const ROOT_DIR = path.join(__dirname, "../");
 
-/* ======================= */
-/* HELPER: STRIP HTML */
-/* ======================= */
+
 const stripHtml = (value) => {
   if (!value || typeof value !== "string") return null;
 
@@ -19,9 +17,7 @@ const stripHtml = (value) => {
   return clean.length ? clean : null;
 };
 
-/* ======================= */
-/* HELPER: DELETE FILE */
-/* ======================= */
+
 const deleteFile = (filePathFromDb) => {
   if (!filePathFromDb) return;
 
@@ -36,9 +32,7 @@ const deleteFile = (filePathFromDb) => {
   }
 };
 
-/* ======================= */
-/* GET ALL */
-/* ======================= */
+
 exports.getAll = async (req, res) => {
   try {
     const data = await prisma.ai_powered.findMany({
@@ -52,9 +46,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* GET ONE */
-/* ======================= */
+
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -77,9 +69,7 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* CREATE */
-/* ======================= */
+
 exports.create = async (req, res) => {
   try {
     const cleanHeading1 = stripHtml(req.body.heading1);
@@ -97,7 +87,7 @@ exports.create = async (req, res) => {
     let media = null;
 
     if (req.file) {
-      media = `uploads/${req.file.filename}`; // ✅ FIXED
+      media = `uploads/${req.file.filename}`;
     }
 
     await prisma.ai_powered.create({
@@ -118,9 +108,7 @@ exports.create = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* UPDATE */
-/* ======================= */
+
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -142,7 +130,7 @@ exports.update = async (req, res) => {
       // delete old file
       deleteFile(existing.media);
 
-      media = `uploads/${req.file.filename}`; // ✅ FIXED
+      media = `uploads/${req.file.filename}`;
     }
 
     await prisma.ai_powered.update({
@@ -169,9 +157,7 @@ exports.update = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* DELETE */
-/* ======================= */
+
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);

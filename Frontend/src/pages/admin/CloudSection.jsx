@@ -57,7 +57,7 @@ export default function CloudSectionForm() {
     e.preventDefault();
     console.log(formData);
 
-    // Go back to list page
+   
     navigate("/dashboard/master/cloud-section");
   };
 

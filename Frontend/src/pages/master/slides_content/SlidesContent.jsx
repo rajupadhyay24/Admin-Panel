@@ -8,8 +8,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
-const BASE_URL = "http://localhost:5000";
 
 export default function SlidesContent() {
   const navigate = useNavigate();

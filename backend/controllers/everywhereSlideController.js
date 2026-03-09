@@ -1,8 +1,7 @@
 const prisma = require("../config/prisma");
 
-/* =============================== */
-/* HELPER: STRIP HTML */
-/* =============================== */
+
+
 const stripHtml = (value) => {
   if (!value || typeof value !== "string") return value;
   return value
@@ -11,9 +10,8 @@ const stripHtml = (value) => {
     .trim();
 };
 
-/* =============================== */
-/* HELPER: BUILD FULL IMAGE URL */
-/* =============================== */
+
+
 const buildImagePath = (req, file, existingImage = null) => {
   if (file) {
     return `uploads/${file.filename}`;
@@ -21,9 +19,7 @@ const buildImagePath = (req, file, existingImage = null) => {
   return existingImage;
 };
 
-/* =============================== */
-/* CREATE */
-/* =============================== */
+
 exports.create = async (req, res) => {
   try {
     const file = req.file;
@@ -46,9 +42,8 @@ exports.create = async (req, res) => {
   }
 };
 
-/* =============================== */
-/* GET ALL */
-/* =============================== */
+
+
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.everywhere_slide.findMany({
@@ -62,9 +57,8 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* =============================== */
-/* GET BY ID */
-/* =============================== */
+
+
 exports.getById = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -85,9 +79,8 @@ exports.getById = async (req, res) => {
   }
 };
 
-/* =============================== */
-/* UPDATE */
-/* =============================== */
+
+
 exports.update = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -130,9 +123,8 @@ exports.update = async (req, res) => {
   }
 };
 
-/* =============================== */
-/* DELETE */
-/* =============================== */
+
+
 exports.remove = async (req, res) => {
   try {
     const id = parseInt(req.params.id);

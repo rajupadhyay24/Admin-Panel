@@ -60,7 +60,7 @@ import OfferSection from "./pages/master/offer_section/OfferSection";
 import OfferSectionForm from "./pages/master/offer_section/OfferSectionForm";
 import EverywhereSlide from "./pages/master/everywhere_slide/EverywhereSlide";
 import EverywhereSlideForm from "./pages/master/everywhere_slide/EverywhereSlideForm";
-// import SolutionForm from "./pages/cms/solution/SolutionForm";
+import ContactSettings from "./pages/master/contact_settings/ContactSettings";
 import AIPowered from "./pages/cms/ai_powered/AIPowered";
 import AIPoweredForm from "./pages/cms/ai_powered/AIPoweredForm";
 import Faqs from "./pages/master/faqs/Faqs";
@@ -69,7 +69,7 @@ import AboutUsBenefits from "./pages/cms/about_us_benefits/AboutUsBenefits";
 import AboutUsBenefitsForm from "./pages/cms/about_us_benefits/AboutUsBenefitsForm";
 import ContactMessages from "./pages/master/contact_messages/ContactMessages";
 import ContactMessageForm from "./pages/master/contact_messages/ContactMessagesForm";
-
+import ContactSettingsForm from "./pages/master/contact_settings/ContactSettingsForm"
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -487,10 +487,20 @@ export const routes = [
         path: "/master/contact-messages/add",
         element: <ContactMessageForm />,
       },
+      // CONTACT SETTINGS
       {
-        path: "/master/contact-messages/edit/:id",
-        element: <ContactMessageForm />,
+        name: "contact-settings",
+        path: "/master/contact-settings",
+        element: <ContactSettings />,
       },
+      {
+        path: "/master/contact-settings/add",
+        element: <ContactSettingsForm />,
+      },
+      {
+        path: "/master/contact-settings/edit/:id",
+        element: <ContactSettingsForm />,
+      }
 
 
     ],

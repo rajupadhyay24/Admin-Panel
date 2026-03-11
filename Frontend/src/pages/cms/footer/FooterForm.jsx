@@ -1,152 +1,200 @@
-import {
-    Card,
-    Typography,
-    Button,
-} from "@material-tailwind/react";
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Card, Typography, Button } from "@material-tailwind/react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function FooterForm() {
-    const navigate = useNavigate();
-    const { id } = useParams();
+  const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({
-        title: "",
-        content: "",
-        image1: null,
-        image2: null,
-        image3: null,
-        image4: null,
-        image5: null,
-    });
+  const [formData, setFormData] = useState({
+    title: "",
+    content: "",
+    contact_email: "",
+    contact_phone: "",
+    address: "",
+    qr_codes: ["", "", "", ""], // 4 QR codes
+  });
 
-    const [preview, setPreview] = useState({
-        image1: null,
-        image2: null,
-        image3: null,
-        image4: null,
-        image5: null,
-    });
+  const [preview, setPreview] = useState(["", "", "", ""]);
 
-    const handleEditorChange = (field, editor) => {
-        const data = editor.getData();
-        setFormData((prev) => ({
-            ...prev,
-            [field]: data,
-        }));
-    };
+  // Fetch existing footer data
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/footer")
+      .then((res) => {
+        const data = res.data || {};
+        const qr = data.qr_code ? JSON.parse(data.qr_code) : ["", "", "", ""];
+        setFormData({
+          title: data.title || "",
+          content: data.content || "",
+          contact_email: data.contact_email || "",
+          contact_phone: data.contact_phone || "",
+          address: data.address || "",
+          qr_codes: qr,
+        });
+        setPreview(qr);
+      })
+      .catch((err) => console.error("Error fetching footer:", err));
+  }, []);
 
-    const handleImageChange = (e) => {
-        const { name, files } = e.target;
-        const file = files[0];
+  // Handle text/textarea inputs
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value || "" }));
+  };
 
-        if (file) {
-            setFormData((prev) => ({
-                ...prev,
-                [name]: file,
-            }));
+  // Handle QR image selection
+  const handleImageChange = (e, index) => {
+    const file = e.target.files[0];
+    if (file) {
+      const updatedQr = [...formData.qr_codes];
+      updatedQr[index] = file;
+      setFormData((prev) => ({ ...prev, qr_codes: updatedQr }));
 
-            setPreview((prev) => ({
-                ...prev,
-                [name]: URL.createObjectURL(file),
-            }));
-        }
-    };
+      const updatedPreview = [...preview];
+      updatedPreview[index] = URL.createObjectURL(file);
+      setPreview(updatedPreview);
+    }
+  };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(formData);
+  // Submit form
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const dataToSend = new FormData();
 
-        navigate("/dashboard/cms/footer");
-    };
+      // Append text fields
+      dataToSend.append("title", formData.title || "");
+      dataToSend.append("content", formData.content || "");
+      dataToSend.append("contact_email", formData.contact_email || "");
+      dataToSend.append("contact_phone", formData.contact_phone || "");
+      dataToSend.append("address", formData.address || "");
 
-    return (
-        <div className="mt-12 mb-8 px-6">
-            <Card className="w-full p-10 shadow-xl rounded-2xl">
+      // Append QR codes
+      formData.qr_codes.forEach((qr) => {
+        if (qr instanceof File) dataToSend.append("qr_codes", qr);
+        else dataToSend.append("existing_qr[]", qr || "");
+      });
 
-                <Typography variant="h4" className="mb-2">
-                    {id ? "Edit Footer" : "Add Footer"}
-                </Typography>
+      await axios.put("http://localhost:5000/api/footer", dataToSend, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-                <Typography variant="small" color="gray" className="mb-8">
-                    Manage Footer Section
-                </Typography>
+      alert("Footer saved successfully!");
+      navigate("/dashboard/cms/footer");
+    } catch (err) {
+      console.error("Error saving footer:", err);
+      alert("Error saving footer. Check console.");
+    }
+  };
 
-                <form onSubmit={handleSubmit} className="grid grid-cols-12 gap-8">
+  return (
+    <div className="mt-12 mb-8 px-6">
+      <Card className="w-full p-10 shadow-xl rounded-2xl">
+        <Typography variant="h4" className="mb-2">
+          Edit Footer
+        </Typography>
+        <Typography variant="small" color="gray" className="mb-8">
+          Manage Footer Section
+        </Typography>
 
-                    {/* Title */}
-                    <div className="col-span-12">
-                        <Typography className="mb-2 font-medium">
-                            Title
-                        </Typography>
-                        <div className="border rounded-xl p-2 bg-white">
-                            <CKEditor
-                                editor={ClassicEditor}
-                                data={formData.title}
-                                onChange={(event, editor) =>
-                                    handleEditorChange("title", editor)
-                                }
-                            />
-                        </div>
-                    </div>
+        <form onSubmit={handleSubmit} className="grid grid-cols-12 gap-8">
+          {/* Title */}
+          <div className="col-span-12">
+            <Typography className="mb-2 font-medium">Title</Typography>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              className="border rounded-xl p-2 w-full"
+            />
+          </div>
 
-                    {/* Content */}
-                    <div className="col-span-12">
-                        <Typography className="mb-2 font-medium">
-                            Content
-                        </Typography>
-                        <div className="border rounded-xl p-2 bg-white">
-                            <CKEditor
-                                editor={ClassicEditor}
-                                data={formData.content}
-                                onChange={(event, editor) =>
-                                    handleEditorChange("content", editor)
-                                }
-                            />
-                        </div>
-                    </div>
+          {/* Content */}
+          <div className="col-span-12">
+            <Typography className="mb-2 font-medium">Content</Typography>
+            <textarea
+              name="content"
+              value={formData.content}
+              onChange={handleChange}
+              className="border rounded-xl p-2 w-full"
+              rows={4}
+            />
+          </div>
 
-                    {/* Images 1–5 */}
-                    {[1, 2, 3, 4, 5].map((num) => (
-                        <div key={num} className="col-span-12 md:col-span-6">
-                            <Typography className="mb-2 font-medium">
-                                Image {num}
-                            </Typography>
+          {/* Contact Email */}
+          <div className="col-span-12 md:col-span-6">
+            <Typography className="mb-2 font-medium">Email</Typography>
+            <input
+              type="email"
+              name="contact_email"
+              value={formData.contact_email}
+              onChange={handleChange}
+              className="border rounded-xl p-2 w-full"
+              required
+              pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+            />
+          </div>
 
-                            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-500 transition overflow-hidden">
-                                {preview[`image${num}`] ? (
-                                    <img
-                                        src={preview[`image${num}`]}
-                                        alt={`Preview ${num}`}
-                                        className="h-full object-cover rounded-xl"
-                                    />
-                                ) : (
-                                    <Typography color="gray">
-                                        Click to upload image {num}
-                                    </Typography>
-                                )}
+          {/* Contact Phone */}
+          <div className="col-span-12 md:col-span-6">
+            <Typography className="mb-2 font-medium">Phone</Typography>
+            <input
+              type="text"
+              name="contact_phone"
+              value={formData.contact_phone}
+              onChange={handleChange}
+              className="border rounded-xl p-2 w-full"
+              required
+              pattern="[0-9]{10}"
+              maxLength={14}
+            />
+          </div>
 
-                                <input
-                                    type="file"
-                                    name={`image${num}`}
-                                    accept="image/*"
-                                    onChange={handleImageChange}
-                                    className="hidden"
-                                />
-                            </label>
-                        </div>
-                    ))}
+          {/* Address */}
+          <div className="col-span-12">
+            <Typography className="mb-2 font-medium">Address</Typography>
+            <textarea
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              className="border rounded-xl p-2 w-full"
+              rows={3}
+            />
+          </div>
 
-                    <div className="col-span-12">
-                        <Button type="submit" fullWidth>
-                            Save
-                        </Button>
-                    </div>
+          {/* QR Codes */}
+          {formData.qr_codes.map((qr, index) => (
+            <div key={index} className="col-span-12 md:col-span-3">
+              <Typography className="mb-2 font-medium">QR Code {index + 1}</Typography>
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-500 transition overflow-hidden">
+                {preview[index] ? (
+                  <img
+                    src={preview[index]}
+                    alt={`QR ${index + 1}`}
+                    className="h-full object-cover rounded-xl"
+                  />
+                ) : (
+                  <Typography color="gray">Click to upload QR {index + 1}</Typography>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageChange(e, index)}
+                  className="hidden"
+                />
+              </label>
+            </div>
+          ))}
 
-                </form>
-            </Card>
-        </div>
-    );
+          <div className="col-span-12">
+            <Button type="submit" fullWidth>
+              Save
+            </Button>
+          </div>
+        </form>
+      </Card>
+    </div>
+  );
 }

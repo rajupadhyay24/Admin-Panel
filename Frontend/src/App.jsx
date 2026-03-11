@@ -3,8 +3,6 @@ import { Dashboard, Auth } from "@/layouts";
 import { SignIn } from "@/pages/auth";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
-import ContactMessages from "./pages/master/contact_messages/ContactMessages";
-import ContactMessageForm from "./pages/master/contact_messages/ContactMessagesForm";
 function App() {
   return (
     <Routes>
@@ -40,8 +38,7 @@ function App() {
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/dashboard/home" replace />} />
-      {/* <Route path="master/contact-messages" element={<ContactMessages />} />
-      <Route path="master/contact-messages/create" element={<ContactMessageForm />} /> */}
+      
     </Routes>
   );
 }

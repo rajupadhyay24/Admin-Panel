@@ -264,6 +264,12 @@ export function Sidenav() {
           </Button>
         </NavLink>
 
+        <NavLink to="/dashboard/master/contact-settings">
+          <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
+           Contact Settings
+          </Button>
+        </NavLink>
+
       </Collapse>
 
       {/* Settings */}

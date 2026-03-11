@@ -6,23 +6,36 @@ import {
     Button,
 } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Footer() {
     const navigate = useNavigate();
+    const [data, setData] = useState([]);
 
-    const [data] = useState([
-        {
-            id: 1,
-            title: "<b>Footer Title</b>",
-            content: "<p>Footer Content</p>",
-            image1: "https://picsum.photos/60?1",
-            image2: "https://picsum.photos/60?2",
-            image3: "https://picsum.photos/60?3",
-            image4: "https://picsum.photos/60?4",
-            image5: "https://picsum.photos/60?5",
-        },
-    ]);
+    useEffect(() => {
+        const fetchFooter = async () => {
+            try {
+                const res = await axios.get("http://localhost:5000/api/footer");
+                console.log(res);
+                if (res.data) setData([res.data]); // wrap in array
+            } catch (err) {
+                console.error("Error fetching footer:", err);
+            }
+        };
+        fetchFooter();
+    }, []);
+
+    const handleDelete = async () => {
+        if (!window.confirm("Are you sure you want to delete the footer?")) return;
+        try {
+            await axios.delete("http://localhost:5000/api/footer");
+            alert("Footer deleted successfully!");
+            setData([]);
+        } catch (err) {
+            console.error("Error deleting footer:", err);
+        }
+    };
 
     return (
         <div className="mt-12 mb-8 flex flex-col gap-12 px-6">
@@ -35,13 +48,10 @@ export default function Footer() {
                     <Typography variant="h6" color="white">
                         Footer Section
                     </Typography>
-
                     <Button
                         color="white"
                         size="sm"
-                        onClick={() =>
-                            navigate("/dashboard/cms/footer/add")
-                        }
+                        onClick={() => navigate("/dashboard/cms/footer/add")}
                     >
                         Add
                     </Button>
@@ -54,11 +64,13 @@ export default function Footer() {
                                 {[
                                     "Title",
                                     "Content",
-                                    "Image1",
-                                    "Image2",
-                                    "Image3",
-                                    "Image4",
-                                    "Image5",
+                                    "Email",
+                                    "Phone",
+                                    "Address",
+                                    "QR Code 1",
+                                    "QR Code 2",
+                                    "QR Code 3",
+                                    "QR Code 4",
                                     "Action",
                                 ].map((head) => (
                                     <th key={head} className="border-b py-3 px-5 text-left">
@@ -74,41 +86,83 @@ export default function Footer() {
                         </thead>
 
                         <tbody>
-                            {data.map((item) => (
-                                <tr key={item.id}>
-                                    <td className="py-3 px-5 border-b">
-                                        <div dangerouslySetInnerHTML={{ __html: item.title }} />
-                                    </td>
+                            {data.map((item) => {
+                                const qrCodes =
+                                    item.qr_code && item.qr_code !== "null"
+                                        ? JSON.parse(item.qr_code)
+                                        : [];
 
-                                    <td className="py-3 px-5 border-b">
-                                        <div dangerouslySetInnerHTML={{ __html: item.content }} />
-                                    </td>
+                                return (
+                                    <tr key={item.id}>
 
-                                    {[1, 2, 3, 4, 5].map((num) => (
-                                        <td key={num} className="py-3 px-5 border-b">
-                                            <img
-                                                src={item[`image${num}`]}
-                                                alt={`Footer ${num}`}
-                                                className="h-12 w-12 object-cover rounded-lg"
-                                            />
+                                        {/* Title */}
+                                        <td className="py-3 px-5 border-b">
+                                            {item.title || "-"}
                                         </td>
-                                    ))}
 
-                                    <td className="py-3 px-5 border-b">
-                                        <Button
-                                            size="sm"
-                                            variant="outlined"
-                                            onClick={() =>
-                                                navigate(
-                                                    `/dashboard/cms/footer/edit/${item.id}`
-                                                )
-                                            }
-                                        >
-                                            Edit
-                                        </Button>
-                                    </td>
-                                </tr>
-                            ))}
+                                        {/* Content */}
+                                        <td className="py-3 px-5 border-b">
+                                            {item.content || "-"}
+                                        </td>
+
+                                        {/* Email */}
+                                        <td className="py-3 px-5 border-b">
+                                            {item.contact_email || "-"}
+                                        </td>
+
+                                        {/* Phone */}
+                                        <td className="py-3 px-5 border-b">
+                                            {item.contact_phone || "-"}
+                                        </td>
+
+                                        {/* Address */}
+                                        <td className="py-3 px-5 border-b">
+                                            {item.address || "-"}
+                                        </td>
+
+                                        {/* QR Codes */}
+                                        {[0, 1, 2, 3].map((i) => (
+                                            <td key={i} className="py-3 px-5 border-b">
+                                                {qrCodes[i] ? (
+                                                    <img
+                                                        src={
+                                                            qrCodes[i].startsWith("http")
+                                                                ? qrCodes[i]
+                                                                : `http://localhost:5000/uploads/qrcodes/${qrCodes[i]}`
+                                                        }
+                                                        alt={`QR ${i + 1}`}
+                                                        className="h-12 w-12 object-cover rounded-lg"
+                                                    />
+                                                ) : (
+                                                    "-"
+                                                )}
+                                            </td>
+                                        ))}
+
+                                        {/* Action */}
+                                        <td className="py-3 px-5 border-b flex gap-2">
+                                            <Button
+                                                size="sm"
+                                                variant="outlined"
+                                                onClick={() =>
+                                                    navigate(`/dashboard/cms/footer/edit/${item.id}`)
+                                                }
+                                            >
+                                                Edit
+                                            </Button>
+
+                                            <Button
+                                                size="sm"
+                                                color="red"
+                                                onClick={() => handleDelete()}
+                                            >
+                                                Delete
+                                            </Button>
+                                        </td>
+
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </CardBody>

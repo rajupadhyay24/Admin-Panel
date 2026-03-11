@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
+const path = require("path");
 const authRoutes = require("./routes/authRoutes");
 const aboutRoutes = require("./routes/aboutRoutes");
 const aboutUsEnterpriseRoutes = require("./routes/aboutUsEnterpriseRoutes");
@@ -27,12 +28,18 @@ const solutionSubCatRoutes = require("./routes/solutionSubCatRoutes");
 const solutionImageRoutes = require("./routes/solutionImageRoutes");
 const contactMessagesRoutes = require("./routes/contactMessagesRoutes");
 const systemArchitectureRoutes = require("./routes/systemArchitectureRoutes");
+const footerRoutes = require("./routes/footerRoutes");
+const contactSettingsRoutes = require("./routes/contactSettingsRoutes");
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
+// app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+app.use("/api/footer", footerRoutes);
+app.use("/api", contactSettingsRoutes);
+app.use("/qrcodes", express.static(path.join(__dirname, "uploads/qrcodes")));
 app.use("/api/system-architecture",systemArchitectureRoutes);
 app.use("/api/about", aboutRoutes);
 app.use("/api/auth", authRoutes);

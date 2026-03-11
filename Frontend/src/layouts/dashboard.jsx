@@ -50,7 +50,8 @@ export function Dashboard() {
       route.pages.map(({ path, element }) => (
         <Route
           key={path}
-          path={path.replace(/^\//, "")}
+          // path={path.replace(/^\//, "")}
+          path={path}
           element={element}
         />
       ))

@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function EverywhereSlideForm() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export default function EverywhereSlideForm() {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:5000/api/everywhere-slide/${id}`)
+        .get(`${BASE_URL}/api/everywhere-slide/${id}`)
         .then((res) => {
           setFormData({
             heading: res.data.heading || "",
@@ -34,7 +35,7 @@ export default function EverywhereSlideForm() {
 
           if (res.data.image) {
             setPreview(
-              `http://localhost:5000/${res.data.image}`
+              `${BASE_URL}/${res.data.image}`
             );
           }
         });
@@ -74,12 +75,12 @@ export default function EverywhereSlideForm() {
 
     if (id) {
       await axios.put(
-        `http://localhost:5000/api/everywhere-slide/${id}`,
+        `${BASE_URL}/api/everywhere-slide/${id}`,
         data
       );
     } else {
       await axios.post(
-        "http://localhost:5000/api/everywhere-slide",
+        `${BASE_URL}/api/everywhere-slide`,
         data
       );
     }

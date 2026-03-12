@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function AboutUsEnterprise() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function AboutUsEnterprise() {
 
   const fetchData = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/aboutusenterprise"
+      `${BASE_URL}/api/aboutusenterprise`
     );
     setData(res.data);
   };
@@ -26,7 +27,7 @@ export default function AboutUsEnterprise() {
 
   const handleDelete = async (id) => {
     await axios.delete(
-      `http://localhost:5000/api/aboutusenterprise/${id}`
+      `${BASE_URL}/api/aboutusenterprise/${id}`
     );
     fetchData();
   };
@@ -78,7 +79,7 @@ export default function AboutUsEnterprise() {
             <tbody>
               {data.map((item) => (
                 <tr key={item.id} className="hover:bg-blue-gray-50">
-                  
+
                   {/* Heading */}
                   <td className="border border-blue-gray-200 px-4 py-3 align-top max-w-xs">
                     <div
@@ -103,7 +104,7 @@ export default function AboutUsEnterprise() {
                   <td className="border border-blue-gray-200 px-4 py-3 text-center">
                     {item.image1 && (
                       <img
-                        src={`http://localhost:5000/${item.image1}`}
+                        src={`${BASE_URL}/${item.image1}`}
                         className="h-14 w-14 object-cover rounded-lg mx-auto"
                         alt=""
                       />
@@ -114,7 +115,7 @@ export default function AboutUsEnterprise() {
                   <td className="border border-blue-gray-200 px-4 py-3 text-center">
                     {item.image2 && (
                       <img
-                        src={`http://localhost:5000/${item.image2}`}
+                        src={`${BASE_URL}/${item.image2}`}
                         className="h-14 w-14 object-cover rounded-lg mx-auto"
                         alt=""
                       />

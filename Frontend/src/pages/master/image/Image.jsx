@@ -8,13 +8,15 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function Image() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
-    const res = await axios.get("http://localhost:5000/api/image");
+    const res = await axios.get(`${BASE_URL}/api/image`);
     setData(res.data);
   };
 
@@ -23,7 +25,7 @@ export default function Image() {
   }, []);
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/api/image/${id}`);
+    await axios.delete(`${BASE_URL}/api/image/${id}`);
     fetchData();
   };
 
@@ -68,7 +70,7 @@ export default function Image() {
             <tbody>
               {data.map((item) => (
                 <tr key={item.id} className="hover:bg-blue-gray-50">
-                  
+
                   {/* Heading */}
                   <td className="border border-blue-gray-200 px-4 py-3 align-top max-w-xs">
                     <div
@@ -93,7 +95,7 @@ export default function Image() {
                   <td className="border border-blue-gray-200 px-4 py-3 text-center">
                     {item.image && (
                       <img
-                        src={`http://localhost:5000/${item.image}`}
+                        src={`${BASE_URL}/${item.image}`}
                         className="h-14 w-14 object-cover rounded-lg mx-auto"
                         alt=""
                       />

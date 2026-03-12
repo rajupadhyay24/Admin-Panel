@@ -28,12 +28,12 @@ export default function AIPoweredForm() {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:5000/api/ai-powered/${id}`)
+        .get(`${BASE_URL}/api/ai-powered/${id}`)
         .then((res) => {
           setFormData(res.data);
 
           if (res.data.media) {
-           const fileUrl = `http://localhost:5000/${res.data.media}`;
+            const fileUrl = `${BASE_URL}/${res.data.media}`;
             setPreview(fileUrl);
 
             // detect video from extension
@@ -94,7 +94,7 @@ export default function AIPoweredForm() {
 
     if (id) {
       await axios.put(
-        `http://localhost:5000/api/ai-powered/${id}`,
+        `${BASE_URL}/api/ai-powered/${id}`,
         data,
         {
           headers: {
@@ -104,7 +104,7 @@ export default function AIPoweredForm() {
       );
     } else {
       await axios.post(
-        "http://localhost:5000/api/ai-powered",
+        `${BASE_URL}/api/ai-powered`,
         data,
         {
           headers: {

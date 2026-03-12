@@ -2,6 +2,7 @@ import { Card, CardHeader, CardBody, Typography, Button } from "@material-tailwi
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function ContactSettings() {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ export default function ContactSettings() {
   // Fetch settings from API
   const fetchSettings = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/contact-settings");
+      const res = await axios.get(`${BASE_URL}/api/contact-settings`);
       //   console.log(res.data[0]);
       setSettings(res.data[0] || {});
     } catch (error) {
@@ -21,7 +22,7 @@ export default function ContactSettings() {
   // Delete settings
   const handleDelete = async (id) => {
     if (window.confirm("Delete this record?")) {
-      await axios.delete(`http://localhost:5000/api/contact-settings/${id}`);
+      await axios.delete(`${BASE_URL}/api/contact-settings/${id}`);
       alert("Deleted Successfully");
       fetchSettings();
     }
@@ -64,10 +65,14 @@ export default function ContactSettings() {
             <tbody>
               {settings.id && (
                 <tr>
-                  <td className="border px-4 py-3">{settings.map_url}</td>
-                  <td className="border px-4 py-3">
+                  <td className="border px-4 py-3 max-w-[250px]">
+                    <span className="block truncate" title={settings.map_url}>
+                      {settings.map_url}
+                    </span>
+                  </td>
+                  <td className="border px-4 py-3 max-w-[250px] truncate">
                     <img
-                      src={`http://localhost:5000/uploads/${settings.bg_image}`}
+                      src={`${BASE_URL}/uploads/${settings.bg_image}`}
                       width="120"
                       alt="BG"
                     />
@@ -76,7 +81,7 @@ export default function ContactSettings() {
                     <Button
                       size="sm"
                       color="white"
-                     onClick={() => navigate(`/dashboard/master/contact-settings/edit/${settings.id}`)}
+                      onClick={() => navigate(`/dashboard/master/contact-settings/edit/${settings.id}`)}
                     >
                       Edit
                     </Button>

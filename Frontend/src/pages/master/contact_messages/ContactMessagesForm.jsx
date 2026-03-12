@@ -18,6 +18,7 @@ import {
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function ContactMessageForm() {
 
@@ -39,7 +40,7 @@ export default function ContactMessageForm() {
         if (id) {
 
             axios
-                .get(`http://localhost:5000/api/contact-messages/${id}`)
+                .get(`${BASE_URL}/api/contact-messages/${id}`)
                 .then((res) => {
 
                     const data = res.data;
@@ -95,7 +96,7 @@ export default function ContactMessageForm() {
             if (id) {
 
                 await axios.put(
-                    `http://localhost:5000/api/contact-messages/${id}`,
+                    `${BASE_URL}/api/contact-messages/${id}`,
                     payload
                 );
 
@@ -104,7 +105,7 @@ export default function ContactMessageForm() {
             } else {
 
                 await axios.post(
-                    `http://localhost:5000/api/contact-messages`,
+                    `${BASE_URL}/api/contact-messages`,
                     payload
                 );
 

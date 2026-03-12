@@ -81,12 +81,6 @@ export function Sidenav() {
           </Button>
         </NavLink>
 
-        <NavLink to="/dashboard/solution/system-architecture">
-          <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
-            System Architecture
-          </Button>
-        </NavLink>
-
         </Collapse>
 
       {/* CMS */}
@@ -287,11 +281,11 @@ export function Sidenav() {
       </Button>
 
       <Collapse open={openSettings}>
-        <NavLink to="/auth/sign-in">
+        {/* <NavLink to="/auth/sign-in">
           <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
             Login
           </Button>
-        </NavLink>
+        </NavLink> */}
 
         <Button
           variant="text"

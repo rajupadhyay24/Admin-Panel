@@ -51,7 +51,7 @@ export default function ImageForm() {
 
     console.log(formData);
 
-    // Redirect back after save
+
     navigate("/dashboard/master/image");
   };
 
@@ -84,7 +84,7 @@ export default function ImageForm() {
             </div>
           </div>
 
-          {/* Content */}
+
           <div className="col-span-12">
             <Typography variant="small" className="mb-2 font-medium">
               Content
@@ -100,7 +100,7 @@ export default function ImageForm() {
             </div>
           </div>
 
-          {/* Image Upload */}
+
           <div className="col-span-12">
             <Typography variant="small" className="mb-2 font-medium">
               Image
@@ -129,7 +129,7 @@ export default function ImageForm() {
             </label>
           </div>
 
-          {/* Buttons */}
+
           <div className="col-span-12 flex gap-4">
             <Button type="submit" fullWidth>
               Save Changes

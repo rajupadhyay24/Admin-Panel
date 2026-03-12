@@ -2,6 +2,8 @@ import { Card, Typography, Button } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function FooterForm() {
   const navigate = useNavigate();
@@ -20,7 +22,7 @@ export default function FooterForm() {
   // Fetch existing footer data
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/footer")
+      .get(`${BASE_URL}/api/footer`)
       .then((res) => {
         const data = res.data || {};
         const qr = data.qr_code ? JSON.parse(data.qr_code) : ["", "", "", ""];
@@ -76,7 +78,7 @@ export default function FooterForm() {
         else dataToSend.append("existing_qr[]", qr || "");
       });
 
-      await axios.put("http://localhost:5000/api/footer", dataToSend, {
+      await axios.put(`${BASE_URL}/api/footer`, dataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

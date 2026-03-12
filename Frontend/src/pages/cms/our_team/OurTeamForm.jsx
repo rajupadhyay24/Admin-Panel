@@ -8,6 +8,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function OurTeamForm() {
   const navigate = useNavigate();
@@ -21,11 +23,11 @@ export default function OurTeamForm() {
 
   const [preview, setPreview] = useState(null);
 
-  /* ================= FETCH FOR EDIT ================= */
+
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:5000/api/our-team/${id}`)
+        .get(`${BASE_URL}/api/our-team/${id}`)
         .then((res) => {
           setFormData({
             heading: res.data.heading || "",
@@ -35,7 +37,7 @@ export default function OurTeamForm() {
 
           if (res.data.image) {
             setPreview(
-              `http://localhost:5000/${res.data.image}`
+              `${BASE_URL}/${res.data.image}`
             );
           }
         })
@@ -82,12 +84,12 @@ export default function OurTeamForm() {
     try {
       if (id) {
         await axios.put(
-          `http://localhost:5000/api/our-team/${id}`,
+          `${BASE_URL}/api/our-team/${id}`,
           data
         );
       } else {
         await axios.post(
-          "http://localhost:5000/api/our-team",
+          `${BASE_URL}/api/our-team`,
           data
         );
       }

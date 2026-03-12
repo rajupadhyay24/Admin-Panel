@@ -59,7 +59,7 @@ export default function WhatSectionForm() {
 
     console.log(formData);
 
-    // After Save → Go Back To List Page
+
     navigate("/dashboard/master/what-section");
   };
 

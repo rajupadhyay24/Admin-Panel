@@ -16,9 +16,6 @@ import SolutionSubCat from "./pages/solution/solutionsubcat/SolutionSubCat";
 import SolutionSubCatForm from "./pages/solution/solutionsubcat/SolutionSubCatForm";
 import SolutionImage from "./pages/solution/solutionimage/SolutionImage";
 import SolutionImageForm from "./pages/solution/solutionimage/SolutionImageForm";
-import SystemArchitecture from "./pages/solution/systemarchitecture/SystemArchitecture";
-import Components from "./pages/solution/components/Components";
-import ComponentsForm from "./pages/solution/components/ComponentsForm";
 
 //CMS ROUTES
 import AboutUs from "./pages/cms/about_us/AboutUs";
@@ -60,7 +57,7 @@ import OfferSection from "./pages/master/offer_section/OfferSection";
 import OfferSectionForm from "./pages/master/offer_section/OfferSectionForm";
 import EverywhereSlide from "./pages/master/everywhere_slide/EverywhereSlide";
 import EverywhereSlideForm from "./pages/master/everywhere_slide/EverywhereSlideForm";
-import ContactSettings from "./pages/master/contact_settings/ContactSettings";
+// import SolutionForm from "./pages/cms/solution/SolutionForm";
 import AIPowered from "./pages/cms/ai_powered/AIPowered";
 import AIPoweredForm from "./pages/cms/ai_powered/AIPoweredForm";
 import Faqs from "./pages/master/faqs/Faqs";
@@ -69,7 +66,10 @@ import AboutUsBenefits from "./pages/cms/about_us_benefits/AboutUsBenefits";
 import AboutUsBenefitsForm from "./pages/cms/about_us_benefits/AboutUsBenefitsForm";
 import ContactMessages from "./pages/master/contact_messages/ContactMessages";
 import ContactMessageForm from "./pages/master/contact_messages/ContactMessagesForm";
+import ContactSettings from "./pages/master/contact_settings/ContactSettings";
 import ContactSettingsForm from "./pages/master/contact_settings/ContactSettingsForm"
+
+
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -126,19 +126,6 @@ export const routes = [
       {
         path: "/solution/solution-images/edit/:id",
         element: <SolutionImageForm />,
-      },
-      {
-        name: "system architecture",
-        path: "/solution/system-architecture",
-        element: <SystemArchitecture />,
-      },
-      {
-        path: "/solution/components",
-        element: <Components />,
-      },
-      {
-        path: "/solution/components/add",
-        element: <ComponentsForm />,
       },
       // CMS ROUTES
       //About Us
@@ -485,6 +472,10 @@ export const routes = [
       },
       {
         path: "/master/contact-messages/add",
+        element: <ContactMessageForm />,
+      },
+      {
+        path: "/master/contact-messages/edit/:id",
         element: <ContactMessageForm />,
       },
       // CONTACT SETTINGS

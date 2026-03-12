@@ -3,6 +3,7 @@ import { Dashboard, Auth } from "@/layouts";
 import { SignIn } from "@/pages/auth";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
+
 function App() {
   return (
     <Routes>
@@ -38,7 +39,7 @@ function App() {
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/dashboard/home" replace />} />
-      
+
     </Routes>
   );
 }

@@ -2,6 +2,7 @@ import { Card, CardHeader, CardBody, Typography, Button } from "@material-tailwi
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function ContactMessages() {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ export default function ContactMessages() {
 
   const fetchMessages = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/contact-messages");
+      const res = await axios.get(`${BASE_URL}/api/contact-messages`);
       setMessages(res.data);
     } catch (error) {
       console.error(error);
@@ -23,7 +24,7 @@ export default function ContactMessages() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete?")) return;
 
-    await axios.delete(`http://localhost:5000/api/contact-messages/${id}`);
+    await axios.delete(`${BASE_URL}/api/contact-messages/${id}`);
     fetchMessages();
   };
 

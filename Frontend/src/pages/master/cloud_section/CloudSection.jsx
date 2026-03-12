@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function CloudSection() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function CloudSection() {
 
   const fetchData = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/cloudsection"
+      `${BASE_URL}/api/cloudsection`
     );
     setData(res.data);
   };
@@ -26,7 +27,7 @@ export default function CloudSection() {
 
   const handleDelete = async (id) => {
     await axios.delete(
-      `http://localhost:5000/api/cloudsection/${id}`
+      `${BASE_URL}/api/cloudsection/${id}`
     );
     fetchData();
   };
@@ -78,7 +79,7 @@ export default function CloudSection() {
             <tbody>
               {data.map((item) => (
                 <tr key={item.id} className="hover:bg-blue-gray-50">
-                  
+
                   <td className="border border-blue-gray-200 px-4 py-3 max-w-xs">
                     <div
                       className="line-clamp-2"
@@ -113,7 +114,7 @@ export default function CloudSection() {
                         .map((img, index) => (
                           <img
                             key={index}
-                            src={`http://localhost:5000/${img}`}
+                            src={`${BASE_URL}/${img}`}
                             className="h-14 w-14 object-cover rounded-lg"
                             alt=""
                           />

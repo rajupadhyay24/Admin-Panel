@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function Footer() {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ export default function Footer() {
     useEffect(() => {
         const fetchFooter = async () => {
             try {
-                const res = await axios.get("http://localhost:5000/api/footer");
+                const res = await axios.get(`${BASE_URL}/api/footer`);
                 console.log(res);
                 if (res.data) setData([res.data]); // wrap in array
             } catch (err) {
@@ -29,7 +30,7 @@ export default function Footer() {
     const handleDelete = async () => {
         if (!window.confirm("Are you sure you want to delete the footer?")) return;
         try {
-            await axios.delete("http://localhost:5000/api/footer");
+            await axios.delete(`${BASE_URL}/api/footer`);
             alert("Footer deleted successfully!");
             setData([]);
         } catch (err) {
@@ -125,10 +126,15 @@ export default function Footer() {
                                             <td key={i} className="py-3 px-5 border-b">
                                                 {qrCodes[i] ? (
                                                     <img
+                                                        // src={
+                                                        //     qrCodes[i].startsWith("http")
+                                                        //         ? qrCodes[i]
+                                                        //         : `http://localhost:5000/uploads/qrcodes/${qrCodes[i]}`
+                                                        // }
                                                         src={
                                                             qrCodes[i].startsWith("http")
                                                                 ? qrCodes[i]
-                                                                : `http://localhost:5000/uploads/qrcodes/${qrCodes[i]}`
+                                                                : `${BASE_URL}/uploads/qrcodes/${qrCodes[i]}`
                                                         }
                                                         alt={`QR ${i + 1}`}
                                                         className="h-12 w-12 object-cover rounded-lg"

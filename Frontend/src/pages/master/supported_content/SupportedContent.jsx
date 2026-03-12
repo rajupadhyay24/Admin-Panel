@@ -8,6 +8,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function SupportedContent() {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ export default function SupportedContent() {
 
   const fetchData = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/supported-content"
+      `${BASE_URL}/api/supported-content`
     );
     setData(res.data);
   };
@@ -26,7 +28,7 @@ export default function SupportedContent() {
 
   const handleDelete = async (id) => {
     await axios.delete(
-      `http://localhost:5000/api/supported-content/${id}`
+      `${BASE_URL}/api/supported-content/${id}`
     );
     fetchData();
   };
@@ -113,7 +115,7 @@ export default function SupportedContent() {
                         item[`image${num}`] ? (
                           <img
                             key={num}
-                            src={`http://localhost:5000/${item[`image${num}`]}`}
+                            src={`${BASE_URL}/${item[`image${num}`]}`}
                             className="h-12 w-12 object-cover rounded"
                             alt=""
                           />

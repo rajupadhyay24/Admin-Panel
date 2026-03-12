@@ -16,7 +16,6 @@
     "@tailwindcss/line-clamp": "^0.4.4",
     "apexcharts": "3.44.0",
     "axios": "^1.13.5",
-    "bootstrap": "^5.3.8",
     "ckeditor5": "^47.5.0",
     "prop-types": "15.8.1",
     "react": "18.2.0",

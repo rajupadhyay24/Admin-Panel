@@ -8,6 +8,8 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function SmarterForm() {
   const navigate = useNavigate();
@@ -21,13 +23,13 @@ export default function SmarterForm() {
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Fetch Data
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (id) {
           const res = await axios.get(
-            `http://localhost:5000/api/smarter/${id}`
+            `${BASE_URL}/api/smarter/${id}`
           );
 
           setForm({
@@ -47,7 +49,8 @@ export default function SmarterForm() {
     fetchData();
   }, [id]);
 
-  // ✅ Prevent render before data ready
+ 
+  
   if (loading) {
     return <div className="p-10">Loading...</div>;
   }
@@ -65,12 +68,12 @@ export default function SmarterForm() {
 
     if (id) {
       await axios.put(
-        `http://localhost:5000/api/smarter/${id}`,
+        `${BASE_URL}/api/smarter/${id}`,
         formData
       );
     } else {
       await axios.post(
-        "http://localhost:5000/api/smarter",
+        `${BASE_URL}/api/smarter`,
         formData
       );
     }
@@ -118,7 +121,7 @@ export default function SmarterForm() {
           {preview && (
             <div className="mt-3">
               <video
-                src={`http://localhost:5000/ /${preview}`}
+                src={`${BASE_URL}/${preview}`}
                 controls
                 className="h-24"
               />

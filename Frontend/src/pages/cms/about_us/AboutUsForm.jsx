@@ -8,6 +8,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function AboutForm() {
   const navigate = useNavigate();
@@ -26,20 +28,20 @@ export default function AboutForm() {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:5000/api/about/${id}`)
+        .get(`${BASE_URL}/api/about/${id}`)
         .then((res) => {
           setFormData(res.data);
 
           if (res.data.image1)
             setPreview((p) => ({
               ...p,
-              image1: `http://localhost:5000/${res.data.image1}`,
+              image1: `${BASE_URL}/${res.data.image1}`,
             }));
 
           if (res.data.image2)
             setPreview((p) => ({
               ...p,
-              image2: `http://localhost:5000/${res.data.image2}`,
+              image2: `${BASE_URL}/${res.data.image2}`,
             }));
         });
     }
@@ -76,12 +78,12 @@ export default function AboutForm() {
 
     if (id) {
       await axios.put(
-        `http://localhost:5000/api/about/${id}`,
+        `${BASE_URL}/api/about/${id}`,
         data
       );
     } else {
       await axios.post(
-        "http://localhost:5000/api/about",
+        `${BASE_URL}/api/about`,
         data
       );
     }

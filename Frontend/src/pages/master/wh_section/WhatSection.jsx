@@ -8,6 +8,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function WhatSection() {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ export default function WhatSection() {
 
   const fetchData = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/what-section"
+      `${BASE_URL}/api/what-section`
     );
     setData(res.data);
   };
@@ -26,7 +28,7 @@ export default function WhatSection() {
 
   const handleDelete = async (id) => {
     await axios.delete(
-      `http://localhost:5000/api/what-section/${id}`
+      `${BASE_URL}/api/what-section/${id}`
     );
     fetchData();
   };
@@ -94,7 +96,7 @@ export default function WhatSection() {
                   <td className="border border-blue-gray-200 px-4 py-3">
                     {item.image && (
                       <img
-                        src={`http://localhost:5000/${item.image}`}
+                        src={`${BASE_URL}/${item.image}`}
                         className="h-12 w-12 object-cover rounded"
                         alt=""
                       />

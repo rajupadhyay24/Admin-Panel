@@ -8,6 +8,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function WhatSectionForm() {
   const navigate = useNavigate();
@@ -24,12 +26,12 @@ export default function WhatSectionForm() {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:5000/api/what-section/${id}`)
+        .get(`${BASE_URL}/api/what-section/${id}`)
         .then((res) => {
           setFormData(res.data);
 
           if (res.data.image) {
-            setPreview(`http://localhost:5000/${res.data.image}`);
+            setPreview(`${BASE_URL}/${res.data.image}`);
           }
         });
     }
@@ -67,13 +69,13 @@ export default function WhatSectionForm() {
     try {
       if (id) {
         await axios.put(
-          `http://localhost:5000/api/what-section/${id}`,
+          `${BASE_URL}/api/what-section/${id}`,
           data,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
       } else {
         await axios.post(
-          "http://localhost:5000/api/what-section",
+          `${BASE_URL}/api/what-section`,
           data,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
@@ -90,7 +92,7 @@ export default function WhatSectionForm() {
       <Card className="w-full p-10">
         <form onSubmit={handleSubmit} className="space-y-6">
 
-          {/* Title */}
+
           <div>
             <Typography>Title</Typography>
             <input

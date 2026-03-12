@@ -10,6 +10,7 @@ import {
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function ContactSettingsForm() {
 
@@ -23,7 +24,7 @@ export default function ContactSettingsForm() {
 
         if (id) {
 
-            axios.get(`http://localhost:5000/api/contact-settings/${id}`)
+            axios.get(`${BASE_URL}/api/contact-settings/${id}`)
                 .then(res => {
                     setMapUrl(res.data.map_url)
                 })
@@ -39,7 +40,7 @@ export default function ContactSettingsForm() {
             formData.append("map_url", mapUrl);
             if (bgImage) formData.append("bg_image", bgImage);
 
-            await axios.put(`http://localhost:5000/api/contact-settings/${id}`, formData, {
+            await axios.put(`${BASE_URL}/api/contact-settings/${id}`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
 

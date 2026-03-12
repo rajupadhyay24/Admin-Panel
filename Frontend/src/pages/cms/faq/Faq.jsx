@@ -8,13 +8,14 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function Faq() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
-    const res = await axios.get("http://localhost:5000/api/cms-faqs");
+    const res = await axios.get(`${BASE_URL}/api/cms-faqs`);
     setData(res.data);
   };
 
@@ -23,18 +24,18 @@ export default function Faq() {
   }, []);
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/api/cms-faqs/${id}`);
+    await axios.delete(`${BASE_URL}/api/cms-faqs/${id}`);
     fetchData();
   };
 
-  // ✅ Function to remove HTML & add dot dot
+
   const truncateText = (html, limit = 120) => {
     if (!html) return "";
 
-    // Remove HTML tags
+
     const plainText = html.replace(/<[^>]+>/g, "");
 
-    // Add dot dot if exceeds limit
+
     if (plainText.length > limit) {
       return plainText.substring(0, limit) + "...";
     }

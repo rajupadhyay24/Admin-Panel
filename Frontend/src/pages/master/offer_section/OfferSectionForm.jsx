@@ -8,6 +8,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function OfferSectionForm() {
   const navigate = useNavigate();
@@ -33,15 +35,15 @@ export default function OfferSectionForm() {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:5000/api/offer/${id}`)
+        .get(`${BASE_URL}/api/offer/${id}`)
         .then((res) => {
           setFormData(res.data);
 
           const images = {};
-          [1,2].forEach((num) => {
+          [1, 2].forEach((num) => {
             if (res.data[`image${num}`]) {
               images[`image${num}`] =
-                `http://localhost:5000/${res.data[`image${num}`]}`;
+                `${BASE_URL}/${res.data[`image${num}`]}`;
             }
           });
           setPreview(images);
@@ -82,12 +84,12 @@ export default function OfferSectionForm() {
 
     if (id) {
       await axios.put(
-        `http://localhost:5000/api/offer/${id}`,
+        `${BASE_URL}/api/offer/${id}`,
         data
       );
     } else {
       await axios.post(
-        "http://localhost:5000/api/offer",
+        `${BASE_URL}/api/offer`,
         data
       );
     }
@@ -109,7 +111,7 @@ export default function OfferSectionForm() {
             }
           />
 
-          {[1,2,3,4,5].map((num) => (
+          {[1, 2, 3, 4, 5].map((num) => (
             <div key={num}>
               <Typography>Heading {num}</Typography>
               <CKEditor
@@ -122,7 +124,7 @@ export default function OfferSectionForm() {
             </div>
           ))}
 
-          {[1,2,3,4].map((num) => (
+          {[1, 2, 3, 4].map((num) => (
             <div key={num}>
               <Typography>Paragraph {num}</Typography>
               <CKEditor
@@ -135,7 +137,7 @@ export default function OfferSectionForm() {
             </div>
           ))}
 
-          {[1,2].map((num) => (
+          {[1, 2].map((num) => (
             <div key={num}>
               <Typography>Image {num}</Typography>
               <input

@@ -57,7 +57,7 @@ export default function NetworkSectionForm() {
     e.preventDefault();
     console.log(formData);
 
-    // Go back to list page
+
     navigate("/dashboard/master/network-section");
   };
 

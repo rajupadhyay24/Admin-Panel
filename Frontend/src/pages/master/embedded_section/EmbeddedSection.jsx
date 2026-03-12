@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
 
 export default function EmbeddedSection() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function EmbeddedSection() {
 
   const fetchData = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/embeddedsection"
+      `${BASE_URL}/api/embeddedsection`
     );
     setData(res.data);
   };
@@ -26,7 +27,7 @@ export default function EmbeddedSection() {
 
   const handleDelete = async (id) => {
     await axios.delete(
-      `http://localhost:5000/api/embeddedsection/${id}`
+      `${BASE_URL}/api/embeddedsection/${id}`
     );
     fetchData();
   };
@@ -78,7 +79,7 @@ export default function EmbeddedSection() {
             <tbody>
               {data.map((item) => (
                 <tr key={item.id} className="hover:bg-blue-gray-50">
-                  
+
                   {/* Heading */}
                   <td className="border border-blue-gray-200 px-4 py-3 max-w-xs">
                     <div
@@ -99,42 +100,41 @@ export default function EmbeddedSection() {
                     />
                   </td>
 
-                  {/* Images */}
-                 <td className="border border-blue-gray-200 px-4 py-3">
-  <div className="flex gap-2 flex-wrap">
-    {[item.image1, item.image2, item.image3, item.image4]
-      .filter(Boolean)
-      .map((img, index) => (
-        <img
-          key={index}
-          src={`http://localhost:5000/${img}`}
-          className="h-12 w-12 object-cover rounded"
-          alt=""
-        />
-      ))}
-  </div>
-</td>
-                  {/* Video */}
-                 {/* Media (Image or Video) */}
-<td className="border border-blue-gray-200 px-4 py-3">
-  {item.video && (
-    item.video.endsWith(".mp4") ||
-    item.video.endsWith(".webm") ||
-    item.video.endsWith(".mov") ? (
-      <video
-        src={`http://localhost:5000/${item.video}`}
-        className="h-14 w-20 rounded"
-        controls
-      />
-    ) : (
-      <img
-        src={`http://localhost:5000/${item.video}`}
-        className="h-14 w-20 object-cover rounded"
-        alt=""
-      />
-    )
-  )}
-</td>
+                
+                  <td className="border border-blue-gray-200 px-4 py-3">
+                    <div className="flex gap-2 flex-wrap">
+                      {[item.image1, item.image2, item.image3, item.image4]
+                        .filter(Boolean)
+                        .map((img, index) => (
+                          <img
+                            key={index}
+                            src={`${BASE_URL}/${img}`}
+                            className="h-12 w-12 object-cover rounded"
+                            alt=""
+                          />
+                        ))}
+                    </div>
+                  </td>
+                 
+                  <td className="border border-blue-gray-200 px-4 py-3">
+                    {item.video && (
+                      item.video.endsWith(".mp4") ||
+                        item.video.endsWith(".webm") ||
+                        item.video.endsWith(".mov") ? (
+                        <video
+                          src={`${BASE_URL}/${item.video}`}
+                          className="h-14 w-20 rounded"
+                          controls
+                        />
+                      ) : (
+                        <img
+                          src={`${BASE_URL}/${item.video}`}
+                          className="h-14 w-20 object-cover rounded"
+                          alt=""
+                        />
+                      )
+                    )}
+                  </td>
 
                   {/* Action */}
                   <td className="border border-blue-gray-200 px-4 py-3">

@@ -50,7 +50,7 @@ export default function SupportedContentForm() {
     e.preventDefault();
     console.log(formData);
 
-    // Redirect back after save
+
     navigate("/dashboard/master/supported-section");
   };
 

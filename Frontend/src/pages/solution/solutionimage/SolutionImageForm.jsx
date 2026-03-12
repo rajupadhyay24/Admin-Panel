@@ -7,6 +7,8 @@ import {
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import BASE_URL from "../../../configs/api";
+
 
 export default function SolutionImageForm() {
   const navigate = useNavigate();
@@ -19,23 +21,23 @@ export default function SolutionImageForm() {
     if (id) {
       axios
         .get(
-          `http://localhost:5000/api/solution-images/${id}`
+          `${BASE_URL}/api/solution-images/${id}`
         )
         .then((res) => {
           setTitle(res.data.title);
 
           setPreview({
             image1: res.data.image1
-              ? `http://localhost:5000/${res.data.image1}`
+              ? `${BASE_URL}/${res.data.image1}`
               : null,
             image2: res.data.image2
-              ? `http://localhost:5000/${res.data.image2}`
+              ? `${BASE_URL}/${res.data.image2}`
               : null,
             image3: res.data.image3
-              ? `http://localhost:5000/${res.data.image3}`
+              ? `${BASE_URL}/${res.data.image3}`
               : null,
             image4: res.data.image4
-              ? `http://localhost:5000/${res.data.image4}`
+              ? `${BASE_URL}/${res.data.image4}`
               : null,
           });
         });
@@ -49,12 +51,12 @@ export default function SolutionImageForm() {
 
     if (id) {
       await axios.put(
-        `http://localhost:5000/api/solution-images/${id}`,
+        `${BASE_URL}/api/solution-images/${id}`,
         formData
       );
     } else {
       await axios.post(
-        "http://localhost:5000/api/solution-images",
+        `${BASE_URL}/api/solution-images`,
         formData
       );
     }
